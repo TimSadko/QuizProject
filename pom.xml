@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.quiz.quizproject/org.quiz.quizproject.HelloApplication</mainClass>
+                            <mainClass>org.quiz.quizproject/org.quiz.quizproject.QuizApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

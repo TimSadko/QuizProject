@@ -1,5 +1,6 @@
 package org.quiz.quizproject;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -31,7 +32,12 @@ public class MainMenuController {
         try{
             String json = Files.readString(f.toPath());
 
-            Quiz quiz = new ObjectMapper().readValue(json, Quiz.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            // Question have a field type, it will try to set it, because it is final it will fail, this config is to prevent it from failing
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+
+            Quiz quiz = objectMapper.readValue(json, Quiz.class);
 
             var app = QuizApplication.getInstance();
 

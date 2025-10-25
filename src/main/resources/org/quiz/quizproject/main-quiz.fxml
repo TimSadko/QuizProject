@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.quiz.quizproject.MainQuizController"
-            prefHeight="400.0" prefWidth="600.0">
+<GridPane prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.MainQuizController">
+    <rowConstraints>
+        <RowConstraints maxHeight="85.0" minHeight="5.800000000000001" prefHeight="5.800000000000001" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="255.8" minHeight="10.0" prefHeight="255.8" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="226.00000381469727" minHeight="7.200015258789051" prefHeight="7.200015258789051" vgrow="ALWAYS" />
+    </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="159.6" minWidth="4.999993801116943" prefWidth="50" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="315.00000619888306" minWidth="0.0" prefWidth="300" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="346.0" minWidth="10.0" prefWidth="50" />
+    </columnConstraints>
 
+    <TableView items="${controller.questions}" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <columns>
+            <TableColumn text="Item">
+                <cellValueFactory><PropertyValueFactory property="text" /></cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
 </GridPane>

@@ -1,8 +1,19 @@
 package org.quiz.quizproject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TrueFalseQuestion extends Question {
+    private final StringProperty txt = new SimpleStringProperty();
+
     private String text;
+
+    @JsonIgnore
     private final QuestionType type = QuestionType.TrueFalse;
+
     private int points;
 
     private boolean correctAnswer;
@@ -16,6 +27,11 @@ public class TrueFalseQuestion extends Question {
     @Override
     public boolean getIsAnswerSelected() {
         return isAnswerSelected;
+    }
+
+    @Override
+    public StringProperty textProperty(){
+        return txt;
     }
 
     public void setIsAnswerSelected(boolean isAnswerSelected) {
@@ -52,6 +68,7 @@ public class TrueFalseQuestion extends Question {
     }
 
     public void setText(String text) {
+        txt.set(text);
         this.text = text;
     }
 

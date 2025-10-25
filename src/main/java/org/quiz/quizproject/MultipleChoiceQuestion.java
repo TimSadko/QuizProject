@@ -1,15 +1,24 @@
 package org.quiz.quizproject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MultipleChoiceQuestion extends Question {
-    private String text;
-    private final QuestionType type = QuestionType.MultipleChoice;
-    private int points;
+    private final StringProperty txt = new SimpleStringProperty();
 
-    private MultipleChoiceQuestionBehaviour questionBehaviour;
+    private String text;
+
+    @JsonIgnore
+    private final QuestionType type = QuestionType.MultipleChoice;
+
+    private int points;
 
     private String[] answers;
 
@@ -21,12 +30,9 @@ public class MultipleChoiceQuestion extends Question {
 
     }
 
-    public MultipleChoiceQuestionBehaviour getQuestionBehaviour() {
-        return questionBehaviour;
-    }
-
-    public void setQuestionBehaviour(MultipleChoiceQuestionBehaviour questionBehaviour) {
-        this.questionBehaviour = questionBehaviour;
+    @Override
+    public StringProperty textProperty(){
+        return txt;
     }
 
     public String[] getAnswers() {
@@ -76,6 +82,7 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     public void setText(String text) {
+        txt.set(text);
         this.text = text;
     }
 
@@ -86,29 +93,7 @@ public class MultipleChoiceQuestion extends Question {
 
     @Override
     public int calcPoints() {
-        if(questionBehaviour == MultipleChoiceQuestionBehaviour.StrictAll){
-            if(correctAnswers.length == selectedAnswers.size() && selectedAnswers.containsAll(Arrays.asList(correctAnswers))) return points;
-            else return 0;
-        }
-        else {
-            int correct = 0;
-
-            for (int i = 0; i < correctAnswers.length; i++){
-                if(selectedAnswers.contains(correctAnswers[i])) correct++;
-            }
-
-            if(questionBehaviour == MultipleChoiceQuestionBehaviour.StrictPenalty){
-                return correct * points - (selectedAnswers.size() - correct) * points;
-            }
-            else if(questionBehaviour == MultipleChoiceQuestionBehaviour.Penalty){
-                int res = correct * points - (selectedAnswers.size() - correct) * points;
-
-                return Math.max(res, 0);
-            }
-            else { // Bonus
-                if(correct == selectedAnswers.size()) return correct + points;
-                else return correct - (selectedAnswers.size() - correct);
-            }
-        }
+        if(correctAnswers.length == selectedAnswers.size() && selectedAnswers.containsAll(Arrays.asList(correctAnswers))) return points;
+        else return 0;
     }
 }

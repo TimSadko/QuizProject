@@ -1,11 +1,21 @@
 package org.quiz.quizproject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.Arrays;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TextQuestion extends Question {
+    private final StringProperty txt = new SimpleStringProperty();
 
     private String text;
+
+    @JsonIgnore
     private final QuestionType type = QuestionType.TrueFalse;
+
     private int points;
 
     private String[] correctAnswers;
@@ -14,6 +24,11 @@ public class TextQuestion extends Question {
 
     public TextQuestion(){
 
+    }
+
+    @Override
+    public StringProperty textProperty(){
+        return txt;
     }
 
     @Override
@@ -59,6 +74,7 @@ public class TextQuestion extends Question {
     }
 
     public void setText(String text) {
+        txt.set(text);
         this.text = text;
     }
 

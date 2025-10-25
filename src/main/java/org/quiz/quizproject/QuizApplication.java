@@ -12,11 +12,20 @@ import java.io.IOException;
 public class QuizApplication extends Application {
     private Stage mainStage;
     private Quiz currentQuiz;
+    private String participantName;
 
     private static QuizApplication instance;
 
     public static QuizApplication getInstance() {
         return instance;
+    }
+
+    public String getParticipantName() {
+        return participantName;
+    }
+
+    public void setParticipantName(String participantName) {
+        this.participantName = participantName;
     }
 
     public Quiz getCurrentQuiz() {

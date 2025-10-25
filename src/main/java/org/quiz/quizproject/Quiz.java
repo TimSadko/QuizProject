@@ -1,7 +1,7 @@
 package org.quiz.quizproject;
 
 public class Quiz {
-    private static final Quiz quiz = new Quiz();
+    //private static final Quiz quiz = new Quiz();
 
     private String id;
     private String title;
@@ -15,11 +15,83 @@ public class Quiz {
 
     private Question[] questions;
 
-    private Quiz(){
+    public Quiz(){
 
     }
 
-    public static Quiz getInstance(){
-        return quiz;
+//    public static Quiz getInstance(){
+//        return quiz;
+//    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
+    public boolean isMixQuestions() {
+        return mixQuestions;
+    }
+
+    public void setMixQuestions(boolean mixQuestions) {
+        this.mixQuestions = mixQuestions;
+    }
+
+    public int getMinScore() {
+        return minScore;
+    }
+
+    public void setMinScore(int minScore) {
+        this.minScore = minScore;
+    }
+
+    public boolean isShowResults() {
+        return showResults;
+    }
+
+    public void setShowResults(boolean showResults) {
+        this.showResults = showResults;
+    }
+
+    public boolean isAnswerRequired() {
+        return answerRequired;
+    }
+
+    public void setAnswerRequired(boolean answerRequired) {
+        this.answerRequired = answerRequired;
+    }
+
+    public Question[] getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Question[] questions) {
+        this.questions = questions;
     }
 }

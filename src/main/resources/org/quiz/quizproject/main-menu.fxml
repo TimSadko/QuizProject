@@ -26,7 +26,7 @@
           </GridPane.margin>
     </Label>
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-       <Button text="Start New Quiz" onAction="#OnStartNewQuizButtonClick">
+       <Button fx:id="loadQuizButton" text="Load Quiz" onAction="#OnLoadQuizButtonClick">
            <font>
                <Font name="System Bold" size="15.0" />
            </font>

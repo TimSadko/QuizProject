@@ -24,7 +24,7 @@ public class MultipleChoiceQuestion extends Question {
 
     private String[] correctAnswers;
     private LinkedList<String> selectedAnswers;
-    private boolean isAnswerSelected;
+    private boolean isAnswerSelected = false;
 
     public MultipleChoiceQuestion(){
 

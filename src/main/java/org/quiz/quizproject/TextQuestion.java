@@ -20,7 +20,7 @@ public class TextQuestion extends Question {
 
     private String[] correctAnswers;
     private String enteredAnswer;
-    private boolean isAnswerSelected;
+    private boolean isAnswerSelected = false;
 
     public TextQuestion(){
 

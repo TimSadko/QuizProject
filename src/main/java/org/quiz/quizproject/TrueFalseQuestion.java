@@ -13,12 +13,11 @@ public class TrueFalseQuestion extends Question {
 
     @JsonIgnore
     private final QuestionType type = QuestionType.TrueFalse;
-
     private int points;
 
     private boolean correctAnswer;
     private boolean selectedAnswer;
-    private boolean isAnswerSelected;
+    private boolean isAnswerSelected = false;
 
     public TrueFalseQuestion(){
 

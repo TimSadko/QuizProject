@@ -22,7 +22,7 @@ public class SingleChoiceQuestion extends Question {
 
     private String correctAnswer;
     private String selectedAnswer;
-    private boolean isAnswerSelected;
+    private boolean isAnswerSelected = false;
 
     public SingleChoiceQuestion(){
 

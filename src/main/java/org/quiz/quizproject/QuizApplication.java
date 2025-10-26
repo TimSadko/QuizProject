@@ -48,6 +48,14 @@ public class QuizApplication extends Application {
         stage.show();
     }
 
+    public void moveToQuestion(int questionNumber){
+
+    }
+
+    public void finishQuiz(){
+
+    }
+
     public Parent replaceSceneContent(String fxml) throws Exception {
         Parent page = (Parent) FXMLLoader.load(QuizApplication.class.getResource(fxml), null, new JavaFXBuilderFactory());
         Scene scene = mainStage.getScene();

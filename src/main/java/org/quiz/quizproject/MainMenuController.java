@@ -45,7 +45,7 @@ public class MainMenuController {
             app.replaceSceneContent("start-up.fxml");
         }
         catch (Exception ex){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("An error has occurred:");
             alert.setHeaderText(ex.getMessage());
 

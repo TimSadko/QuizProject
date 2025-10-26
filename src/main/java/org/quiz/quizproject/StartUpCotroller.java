@@ -28,7 +28,7 @@ public class StartUpCotroller {
                 app.replaceSceneContent("main-quiz.fxml");
             }
             else{
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Name is empty!");
                 alert.setHeaderText("Name has to have at least 2 characters excluding spaces");
 
@@ -36,7 +36,7 @@ public class StartUpCotroller {
             }
         }
         catch (Exception ex){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("An error has occurred:");
             alert.setHeaderText(ex.getMessage());
 

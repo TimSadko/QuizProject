@@ -2,6 +2,7 @@ package org.quiz.quizproject;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.Objects;
@@ -20,13 +21,7 @@ public class QuizSingleChoiceController implements QuizController {
     private Label questionTextLabel;
 
     @FXML
-    private Button nextButton;
-
-    @FXML
-    private Button prevButton;
-
-    @FXML
-    private Button finishButton;
+    private HBox buttonsContainer;
 
     @FXML
     private ToggleGroup scGroup;
@@ -78,18 +73,7 @@ public class QuizSingleChoiceController implements QuizController {
 
     @Override
     public void init(){
-        if(questionNumber == 1) {
-            prevButton.setVisible(false);
-            finishButton.setVisible(false);
-        }
-        else{
-            if(questionNumber == numberOfQuestions){
-                nextButton.setVisible(false);
-            }
-            else{
-                finishButton.setVisible(false);
-            }
-        }
+        initButtons();
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
         questionTextLabel.setText(question.getText());
@@ -104,6 +88,34 @@ public class QuizSingleChoiceController implements QuizController {
             if(question.getIsAnswerSelected() && Objects.equals(radioButtons[i].getText(), question.getSelectedAnswer())) radioButtons[i].setSelected(true);
 
             vbox.getChildren().add(radioButtons[i]);
+        }
+    }
+
+    private void initButtons(){
+        var btnNext = new Button();
+        btnNext.setText("next");
+        btnNext.setOnAction(e -> onNextButtonClick());
+
+        if(questionNumber == 1) {
+            buttonsContainer.getChildren().add(btnNext);
+        }
+        else{
+            var btnPrev = new Button();
+            btnPrev.setText("previous");
+            btnPrev.setOnAction(e -> onPreviousButtonClick());
+
+            buttonsContainer.getChildren().add(btnPrev);
+
+            if(questionNumber == numberOfQuestions){
+                var btnFinish = new Button();
+                btnFinish.setText("finish");
+                btnFinish.setOnAction(e -> onFinishButtonClick());
+
+                buttonsContainer.getChildren().add(btnFinish);
+            }
+            else{
+                buttonsContainer.getChildren().add(btnNext);
+            }
         }
     }
 

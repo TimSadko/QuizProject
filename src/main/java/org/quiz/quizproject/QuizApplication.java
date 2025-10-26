@@ -91,6 +91,9 @@ public class QuizApplication extends Application {
                 case MultipleChoice:
                     moveToQuestion("quiz-multiple-choice.fxml" ,cur, questionNumber);
                     break;
+                case Text:
+                    moveToQuestion("quiz-text.fxml" ,cur, questionNumber);
+                    break;
                 default:
                     throw new IOException("Not implemented");
             }

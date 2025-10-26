@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class MultipleChoiceQuestion extends Question {
     private String[] answers;
 
     private String[] correctAnswers;
-    private LinkedList<String> selectedAnswers;
+    private ArrayList<String> selectedAnswers = new ArrayList<String>();
     private boolean isAnswerSelected = false;
 
     public MultipleChoiceQuestion(){
@@ -52,11 +53,11 @@ public class MultipleChoiceQuestion extends Question {
         this.isAnswerSelected = isAnswerSelected;
     }
 
-    public LinkedList<String> getSelectedAnswers() {
+    public ArrayList<String> getSelectedAnswers() {
         return selectedAnswers;
     }
 
-    public void setSelectedAnswers(LinkedList<String> selectedAnswers) {
+    public void setSelectedAnswers(ArrayList<String> selectedAnswers) {
         this.selectedAnswers = selectedAnswers;
     }
 

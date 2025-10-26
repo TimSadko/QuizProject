@@ -14,7 +14,7 @@ public class TextQuestion extends Question {
     private String text;
 
     @JsonIgnore
-    private final QuestionType type = QuestionType.TrueFalse;
+    private final QuestionType type = QuestionType.Text;
 
     private int points;
 

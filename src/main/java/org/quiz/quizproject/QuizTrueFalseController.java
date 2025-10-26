@@ -2,6 +2,7 @@ package org.quiz.quizproject;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 
 public class QuizTrueFalseController implements QuizController {
     private boolean mustSelect;
@@ -17,13 +18,7 @@ public class QuizTrueFalseController implements QuizController {
     private Label questionTextLabel;
 
     @FXML
-    private Button nextButton;
-
-    @FXML
-    private Button prevButton;
-
-    @FXML
-    private Button finishButton;
+    private HBox buttonsContainer;
 
     @FXML
     private RadioButton radioTrue;
@@ -76,18 +71,7 @@ public class QuizTrueFalseController implements QuizController {
 
     @Override
     public void init(){
-        if(questionNumber == 1) {
-            prevButton.setVisible(false);
-            finishButton.setVisible(false);
-        }
-        else{
-            if(questionNumber == numberOfQuestions){
-                nextButton.setVisible(false);
-            }
-            else{
-                finishButton.setVisible(false);
-            }
-        }
+        initButtons();
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
         questionTextLabel.setText(question.getText());
@@ -100,6 +84,34 @@ public class QuizTrueFalseController implements QuizController {
         if(question.getIsAnswerSelected()){
             if(question.getSelectedAnswer()) radioTrue.setSelected(true);
             else radioFalse.setSelected(true);
+        }
+    }
+
+    private void initButtons(){
+        var btnNext = new Button();
+        btnNext.setText("next");
+        btnNext.setOnAction(e -> onNextButtonClick());
+
+        if(questionNumber == 1) {
+            buttonsContainer.getChildren().add(btnNext);
+        }
+        else{
+            var btnPrev = new Button();
+            btnPrev.setText("previous");
+            btnPrev.setOnAction(e -> onPreviousButtonClick());
+
+            buttonsContainer.getChildren().add(btnPrev);
+
+            if(questionNumber == numberOfQuestions){
+                var btnFinish = new Button();
+                btnFinish.setText("finish");
+                btnFinish.setOnAction(e -> onFinishButtonClick());
+
+                buttonsContainer.getChildren().add(btnFinish);
+            }
+            else{
+                buttonsContainer.getChildren().add(btnNext);
+            }
         }
     }
 

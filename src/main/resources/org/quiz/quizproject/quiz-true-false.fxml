@@ -37,13 +37,9 @@
         <RadioButton fx:id="radioTrue" text="True"/>
         <RadioButton fx:id="radioFalse" text="False"/>
     </VBox>
-    <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+    <HBox fx:id="buttonsContainer" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <padding>
             <Insets top="5.0"/>
         </padding>
-
-        <Button fx:id="prevButton" onAction="#onPreviousButtonClick">previous</Button>
-        <Button fx:id="nextButton" onAction="#onNextButtonClick">next</Button>
-        <Button fx:id="finishButton" onAction="#onFinishButtonClick">finish</Button>
     </HBox>
 </GridPane>

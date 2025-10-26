@@ -52,40 +52,6 @@ public class QuizApplication extends Application {
         stage.show();
     }
 
-    public void moveToQuestion(int questionNumber){
-        Question cur = questions.get(questionNumber - 1);
-
-        try{
-            switch (cur.getType()){
-                case TrueFalse:
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("quiz-true-false.fxml"));
-                    Parent page = (Parent)loader.load();
-
-                    QuizTrueFalseController controller = loader.getController();
-
-                    controller.setQuestion((TrueFalseQuestion) cur);
-                    controller.setMustSelect(currentQuiz.isAnswerRequired());
-                    controller.setNumberOfQuestions(questions.size());
-                    controller.setQuestionNumber(questionNumber);
-
-                    controller.init();
-
-                    Scene scene = mainStage.getScene();
-                    mainStage.getScene().setRoot(page);
-                    mainStage.sizeToScene();
-                    break;
-            }
-        }
-        catch (Exception ex){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("An error has occurred:");
-            alert.setHeaderText(ex.getMessage());
-            alert.setContentText(ex.getMessage());
-
-            alert.showAndWait();
-        }
-    }
-
     public void finishQuiz(){
 
     }
@@ -98,7 +64,7 @@ public class QuizApplication extends Application {
         moveToQuestion(1);
     }
 
-    public Parent replaceSceneContent(String fxml) throws Exception {
+    public void replaceSceneContent(String fxml) throws Exception {
         Parent page = (Parent) FXMLLoader.load(QuizApplication.class.getResource(fxml), null, new JavaFXBuilderFactory());
         Scene scene = mainStage.getScene();
         if (scene == null) {
@@ -109,6 +75,48 @@ public class QuizApplication extends Application {
             mainStage.getScene().setRoot(page);
         }
         mainStage.sizeToScene();
-        return page;
+    }
+
+    public void moveToQuestion(int questionNumber){
+        Question cur = questions.get(questionNumber - 1);
+
+        try{
+            switch (cur.getType()){
+                case TrueFalse:
+                    moveToQuestion("quiz-true-false.fxml" ,cur, questionNumber);
+                    break;
+                case SingleChoice:
+                    moveToQuestion("quiz-single-choice.fxml" ,cur, questionNumber);
+                    break;
+                default:
+                    throw new IOException("Not implemented");
+            }
+        }
+        catch (Exception ex){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("An error has occurred:");
+            alert.setHeaderText(ex.getMessage());
+            alert.setContentText(ex.getMessage());
+
+            alert.showAndWait();
+        }
+    }
+
+    private void moveToQuestion(String fxml, Question q, int questionNumber) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+        Parent page = (Parent)loader.load();
+
+        QuizController controller = loader.getController();
+
+        controller.setQuestion(q);
+        controller.setMustSelect(currentQuiz.isAnswerRequired());
+        controller.setNumberOfQuestions(questions.size());
+        controller.setQuestionNumber(questionNumber);
+
+        controller.init();
+
+        Scene scene = mainStage.getScene();
+        mainStage.getScene().setRoot(page);
+        mainStage.sizeToScene();
     }
 }

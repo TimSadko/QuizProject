@@ -1,37 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.quiz.quizproject.QuizTrueFalseController"
-            prefHeight="270" prefWidth="480" maxHeight="Infinity" maxWidth="Infinity">
+<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.QuizTrueFalseController">
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="100.0" minWidth="5.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="100.0" prefWidth="380.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="100.0" minWidth="5.0" prefWidth="100.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="71.0" vgrow="ALWAYS" />
-        <RowConstraints minHeight="10.0" prefHeight="138.6" vgrow="ALWAYS" />
-        <RowConstraints minHeight="10.0" prefHeight="63.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="Infinity" minHeight="10" prefHeight="10" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="Infinity" minHeight="20" prefHeight="20.0" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="32" minHeight="32.0" prefHeight="32" vgrow="NEVER" />
+      <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="10" vgrow="ALWAYS" />
     </rowConstraints>
-
-    <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="1/24"></Label>
-    <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Question?"></Label>
 
     <fx:define>
         <ToggleGroup fx:id="tfGroup" />
     </fx:define>
 
-    <RadioButton GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="radioTrue" text="True" toggleGroup="$tfGroup"></RadioButton>
-    <RadioButton GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="radioFalse" text="False" toggleGroup="$tfGroup"></RadioButton>
+    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <padding>
+            <Insets top="5.0"/>
+        </padding>
 
-    <Button fx:id="prevButton" onAction="#onPreviousButtonClick">previous</Button>
-    <Button fx:id="nextButton" onAction="#onNextButtonClick">next</Button>
-    <Button fx:id="finishButton" onAction="#onFinishButtonClick">finish</Button>
+        <Label fx:id="questionNumberLabel" text="1/24" textFill="#595959">
+            <font>
+                <Font size="11.0"/>
+            </font>
+        </Label>
+        <Label fx:id="questionTextLabel" text="Question?" wrapText="true">
+            <font>
+                <Font size="13.0"/>
+            </font>
+        </Label>
+
+        <RadioButton fx:id="radioTrue" text="True" toggleGroup="$tfGroup"/>
+        <RadioButton fx:id="radioFalse" text="False" toggleGroup="$tfGroup"/>
+    </VBox>
+    <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <padding>
+            <Insets top="5.0"/>
+        </padding>
+
+        <Button fx:id="prevButton" onAction="#onPreviousButtonClick">previous</Button>
+        <Button fx:id="nextButton" onAction="#onNextButtonClick">next</Button>
+        <Button fx:id="finishButton" onAction="#onFinishButtonClick">finish</Button>
+    </HBox>
 </GridPane>

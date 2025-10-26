@@ -25,7 +25,8 @@ public class StartUpCotroller {
                 var app = QuizApplication.getInstance();
 
                 app.setParticipantName(name);
-                app.replaceSceneContent("main-quiz.fxml");
+
+                app.startQuiz();
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.WARNING);

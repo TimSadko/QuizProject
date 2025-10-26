@@ -68,8 +68,8 @@ public class QuizTrueFalseController {
         else if(rb == radioFalse) question.setSelectedAnswer(false);
     }
 
-    private void Init(){
-        if(questionNumber == 0) {
+    public void init(){
+        if(questionNumber == 1) {
             prevButton.setVisible(false);
             finishButton.setVisible(false);
         }
@@ -84,5 +84,37 @@ public class QuizTrueFalseController {
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
         questionTextLabel.setText(question.getText());
+    }
+
+    public boolean isMustSelect() {
+        return mustSelect;
+    }
+
+    public void setMustSelect(boolean mustSelect) {
+        this.mustSelect = mustSelect;
+    }
+
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    public void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public TrueFalseQuestion getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(TrueFalseQuestion question) {
+        this.question = question;
     }
 }

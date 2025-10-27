@@ -85,7 +85,7 @@ public class QuizApplication extends Application {
 
                 ResultsPageController controller = loader.getController();
 
-                //controller.
+                controller.init();
 
                 Scene scene = mainStage.getScene();
                 mainStage.getScene().setRoot(page);
@@ -146,7 +146,7 @@ public class QuizApplication extends Application {
         }
     }
 
-    private int calcQuizMaxPoints(Quiz quiz) {
+    public int calcQuizMaxPoints(Quiz quiz) {
         int maxPoints = 0;
 
         for (int i = 0; i < quiz.getQuestions().length; i++){
@@ -156,7 +156,7 @@ public class QuizApplication extends Application {
         return maxPoints;
     }
 
-    private int calcPoints(Quiz quiz) {
+    public int calcPoints(Quiz quiz) {
         int points = 0;
 
         for (int i = 0; i < quiz.getQuestions().length; i++){

@@ -60,6 +60,7 @@ public class TextQuestion extends Question {
         this.correctAnswers = correctAnswers;
     }
 
+    @Override
     public int getPoints() {
         return points;
     }

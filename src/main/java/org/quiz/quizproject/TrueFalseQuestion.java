@@ -53,6 +53,7 @@ public class TrueFalseQuestion extends Question {
         this.correctAnswer = correctAnswer;
     }
 
+    @Override
     public int getPoints() {
         return points;
     }

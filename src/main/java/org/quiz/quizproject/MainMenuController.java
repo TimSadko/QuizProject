@@ -41,6 +41,7 @@ public class MainMenuController {
 
             var app = QuizApplication.getInstance();
 
+            app.setOutputPath(f.getParent());
             app.setCurrentQuiz(quiz);
             app.replaceSceneContent("start-up.fxml");
         }

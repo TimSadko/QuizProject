@@ -23,5 +23,6 @@ public abstract class Question {
     public abstract StringProperty textProperty();
     public abstract String getText();
     public abstract QuestionType getType();
+    public abstract int getPoints();
     public abstract int calcPoints();
 }

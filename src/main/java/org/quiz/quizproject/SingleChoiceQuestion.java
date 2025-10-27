@@ -66,6 +66,7 @@ public class SingleChoiceQuestion extends Question {
         this.correctAnswer = correctAnswer;
     }
 
+    @Override
     public int getPoints() {
         return points;
     }

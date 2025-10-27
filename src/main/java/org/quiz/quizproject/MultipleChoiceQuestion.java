@@ -69,6 +69,7 @@ public class MultipleChoiceQuestion extends Question {
         this.correctAnswers = correctAnswers;
     }
 
+    @Override
     public int getPoints() {
         return points;
     }

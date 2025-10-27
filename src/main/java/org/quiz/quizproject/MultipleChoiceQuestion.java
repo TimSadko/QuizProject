@@ -7,8 +7,6 @@ import javafx.beans.property.StringProperty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MultipleChoiceQuestion extends Question {

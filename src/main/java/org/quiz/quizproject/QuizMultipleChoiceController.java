@@ -1,11 +1,12 @@
 package org.quiz.quizproject;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.util.Objects;
 
 public class QuizMultipleChoiceController implements QuizController {
     private boolean mustSelect;

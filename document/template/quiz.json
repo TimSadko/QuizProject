@@ -1,0 +1,53 @@
+{
+  "id": "001q",
+  "title": "Test quiz",
+  "description": "Full quiz description",
+  "timeLimit": 3,
+  "mixQuestions": false,
+  "minScore": 3,
+  "showResults": true,
+  "answerRequired": false,
+  "questions": [
+    {
+      "text": "Are the sky blue?",
+      "type": "TrueFalse",
+      "points": 1,
+      "correctAnswer": true
+    },
+    {
+      "text": "Out options below what are the correct way to pronounce C#?",
+      "type": "SingleChoice",
+      "points": 1,
+      "answers": [
+        "C Slesh",
+        "C Hashtag",
+        "C Sharp",
+        "C Dull"
+      ],
+      "correctAnswer": "C Sharp"
+    },
+    {
+      "text": "Out options below what are the existing programming languages?",
+      "type": "MultipleChoice",
+      "points": 2,
+      "answers": [
+        "C",
+        "A#",
+        "C++",
+        "C--"
+      ],
+      "correctAnswers": [
+        "C",
+        "C++"
+      ]
+    },
+    {
+      "text": "What key-word is placed before the method in C# to make it asyncronus?",
+      "type": "Text",
+      "points": 2,
+      "correctAnswers": [
+        "async"
+      ]
+    }
+  ]
+}

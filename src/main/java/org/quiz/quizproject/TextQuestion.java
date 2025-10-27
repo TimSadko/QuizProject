@@ -86,6 +86,7 @@ public class TextQuestion extends Question {
 
     @Override
     public int calcPoints() {
+        if(!isAnswerSelected) return 0;
         return Arrays.asList(correctAnswers).contains(cleanString(enteredAnswer)) ? points : 0;
     }
 

@@ -95,6 +95,7 @@ public class MultipleChoiceQuestion extends Question {
 
     @Override
     public int calcPoints() {
+        if(!isAnswerSelected) return 0;
         if(correctAnswers.length == selectedAnswers.size() && selectedAnswers.containsAll(Arrays.asList(correctAnswers))) return points;
         else return 0;
     }

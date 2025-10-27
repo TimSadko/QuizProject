@@ -1,13 +1,11 @@
 package org.quiz.quizproject;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-import java.net.URL;
+import javafx.scene.layout.VBox;
 
 public class StartUpCotroller {
     @FXML
@@ -17,7 +15,10 @@ public class StartUpCotroller {
     private TextField nameTextField;
 
     @FXML
-    public void OnStartButtonClick(){
+    private VBox vbox;
+
+    @FXML
+    public void onStartButtonClick(){
         String name = nameTextField.getText().toLowerCase().trim();
 
         try{
@@ -50,5 +51,21 @@ public class StartUpCotroller {
         var quiz = QuizApplication.getInstance().getCurrentQuiz();
 
         quizNameLabel.setText(quiz.getTitle());
+
+        Label timeLimitLabel = new Label();
+
+        if(quiz.getTimeLimit() > 0){
+            timeLimitLabel.setText("This quiz has time limit: " + quiz.getTimeLimit() + " minutes");
+        }
+        else{
+            timeLimitLabel.setText("This quiz has no time limit");
+        }
+
+        vbox.getChildren().add(timeLimitLabel);
+
+        Button startQuizButton = new Button();
+        startQuizButton.setText("start quiz");
+        startQuizButton.setOnAction(e -> onStartButtonClick());
+        vbox.getChildren().add(startQuizButton);
     }
 }

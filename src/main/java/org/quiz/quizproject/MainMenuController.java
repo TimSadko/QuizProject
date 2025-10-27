@@ -29,6 +29,16 @@ public class MainMenuController {
         chooser.setTitle("Select Quiz File");
         File f = chooser.showOpenDialog(loadQuizButton.getScene().getWindow());
 
+        if(f == null || !f.exists()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid quiz file");
+            alert.setHeaderText("A quiz file must be chosen before the start of a quiz");
+
+            alert.showAndWait();
+
+            return;
+        }
+
         try{
             String json = Files.readString(f.toPath());
 

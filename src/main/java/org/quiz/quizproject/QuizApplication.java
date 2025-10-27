@@ -2,6 +2,7 @@ package org.quiz.quizproject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
@@ -13,9 +14,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class QuizApplication extends Application {
@@ -27,10 +27,30 @@ public class QuizApplication extends Application {
 
     private ArrayList<Question> questions;
 
+    private Timer timer;
+    private long timerStart;
+    private long timerStop;
+
     private static QuizApplication instance;
 
     public static QuizApplication getInstance() {
         return instance;
+    }
+
+    public long getTimerStart() {
+        return timerStart;
+    }
+
+    public void setTimerStart(long timerStart) {
+        this.timerStart = timerStart;
+    }
+
+    public long getTimerStop() {
+        return timerStop;
+    }
+
+    public void setTimerStop(long timerStop) {
+        this.timerStop = timerStop;
     }
 
     public String getOutputPath() {
@@ -69,19 +89,23 @@ public class QuizApplication extends Application {
         stage.show();
     }
 
-    public void finishQuiz(){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Quiz Ending:");
-        alert.setHeaderText("Are you sure you want to end the quiz?");
+    private void finishQuizTimer() throws IOException {
+        timerStop = System.currentTimeMillis();
 
-        Optional<ButtonType> buttonType = alert.showAndWait();
+        saveQuizAttempt();
 
-        if(buttonType.isPresent() && buttonType.get().equals(ButtonType.OK)) {
-            try {
-                saveQuizAttempt();
-
+        Platform.runLater(new Runnable() {
+            // Because this code is ran in different thread, in order for it to work, all UI changes has to be this way
+            @Override
+            public void run() {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("results-page.fxml"));
-                Parent page = (Parent)loader.load();
+                Parent page = null;
+
+                try {
+                    page = (Parent)loader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
                 ResultsPageController controller = loader.getController();
 
@@ -91,14 +115,45 @@ public class QuizApplication extends Application {
                 mainStage.getScene().setRoot(page);
                 mainStage.sizeToScene();
             }
-            catch (Exception ex){
-                Alert err = new Alert(Alert.AlertType.ERROR);
-                err.setTitle("An error has occurred:");
-                //err.setHeaderText(ex.getMessage());
-                err.setContentText(ex.getMessage());
+        });
+    }
 
-                err.showAndWait();
-            }
+    public void finishQuiz(){
+        if(timer != null) {
+            timer.cancel(); // Stop timer
+        }
+
+        timerStop = System.currentTimeMillis();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quiz Ending:");
+        alert.setHeaderText("Are you sure you want to end the quiz?");
+
+        Optional<ButtonType> buttonType = alert.showAndWait();
+
+        if(!buttonType.isPresent() || !buttonType.get().equals(ButtonType.OK)) return;
+
+        try {
+            saveQuizAttempt();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("results-page.fxml"));
+            Parent page = (Parent)loader.load();
+
+            ResultsPageController controller = loader.getController();
+
+            controller.init();
+
+            Scene scene = mainStage.getScene();
+            mainStage.getScene().setRoot(page);
+            mainStage.sizeToScene();
+        }
+        catch (Exception ex){
+            Alert err = new Alert(Alert.AlertType.ERROR);
+            err.setTitle("An error has occurred:");
+            //err.setHeaderText(ex.getMessage());
+            err.setContentText(ex.getMessage());
+
+            err.showAndWait();
         }
     }
 
@@ -120,7 +175,7 @@ public class QuizApplication extends Application {
 
             oldQuizResult.getResults().add(newAttempt);
 
-            PrintWriter writer = new PrintWriter(f, "UTF-8");
+            PrintWriter writer = new PrintWriter(f, StandardCharsets.UTF_8);
             writer.print(objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(oldQuizResult));
             writer.close();
         }
@@ -140,7 +195,7 @@ public class QuizApplication extends Application {
 
             quizResult.getResults().add(newAttempt);
 
-            PrintWriter writer = new PrintWriter(f, "UTF-8");
+            PrintWriter writer = new PrintWriter(f, StandardCharsets.UTF_8);
             writer.print(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(quizResult));
             writer.close();
         }
@@ -167,11 +222,27 @@ public class QuizApplication extends Application {
     }
 
     public void startQuiz(){
-        questions = new ArrayList(Arrays.asList(currentQuiz.getQuestions()));
+        questions = new ArrayList<>(Arrays.asList(currentQuiz.getQuestions()));
 
         if(currentQuiz.isMixQuestions()) Collections.shuffle(questions);
 
+        if(currentQuiz.getTimeLimit() > 0){ // Set timer
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        finishQuizTimer();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }, ((long)currentQuiz.getTimeLimit() * 60 * 1000));
+        }
+
         moveToQuestion(1);
+
+        timerStart = System.currentTimeMillis();
     }
 
     public void replaceSceneContent(String fxml) throws Exception {

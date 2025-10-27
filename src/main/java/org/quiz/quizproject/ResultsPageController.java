@@ -6,6 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class ResultsPageController {
     @FXML
     private VBox infoBox;
@@ -37,6 +42,14 @@ public class ResultsPageController {
 
                 infoBox.getChildren().add(passingMessageLabel);
             }
+
+            Date date = new Date(app.getTimerStop() - app.getTimerStart() - 3600000);
+            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            String dateFormatted = formatter.format(date);
+
+            Label labelTimePassed = new Label();
+            labelTimePassed.setText("Quiz time: " + dateFormatted);
+            infoBox.getChildren().add(labelTimePassed);
 
             Button btnQuit = new Button();
             btnQuit.setText("quit");

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
-<GridPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.quiz.quizproject.QuizTextController"
-          maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480">
+<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.QuizTextController">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" maxWidth="100.0" minWidth="5.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="100.0" prefWidth="380.0" />
@@ -28,25 +24,28 @@
 
     <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <padding>
-            <Insets top="5.0"/>
+            <Insets top="5.0" />
         </padding>
 
         <Label fx:id="questionNumberLabel" text="1/24" textFill="#595959">
             <font>
-                <Font size="11.0"/>
+                <Font size="11.0" />
             </font>
         </Label>
         <Label fx:id="questionTextLabel" text="Question?" wrapText="true">
             <font>
-                <Font size="13.0"/>
+                <Font size="13.0" />
             </font>
         </Label>
 
-        <TextField fx:id="textField"></TextField>
+        <TextField fx:id="textField">
+         <VBox.margin>
+            <Insets top="4.0" />
+         </VBox.margin></TextField>
     </VBox>
     <HBox fx:id="buttonsContainer" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <padding>
-            <Insets top="5.0"/>
+            <Insets top="5.0" />
         </padding>
     </HBox>
 </GridPane>

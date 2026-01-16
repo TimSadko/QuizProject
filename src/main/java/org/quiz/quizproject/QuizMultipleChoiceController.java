@@ -1,6 +1,7 @@
 package org.quiz.quizproject;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -87,6 +88,9 @@ public class QuizMultipleChoiceController implements QuizController {
             radioButtons[i].setText(question.getAnswers()[i]);
 
             if(question.getIsAnswerSelected() && question.getSelectedAnswers().contains(radioButtons[i].getText())) radioButtons[i].setSelected(true);
+
+            if(i == 0) VBox.setMargin(radioButtons[i], new Insets(4, 0, 0, 0));
+            else VBox.setMargin(radioButtons[i], new Insets(2, 0, 0, 0));
 
             vbox.getChildren().add(radioButtons[i]);
         }

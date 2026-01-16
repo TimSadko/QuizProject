@@ -31,10 +31,26 @@ public class QuizApplication extends Application {
     private long timerStart;
     private long timerStop;
 
+    private boolean practice;
+
+    private ArrayList<AttemptResult> attemts;
+
     private static QuizApplication instance;
 
     public static QuizApplication getInstance() {
         return instance;
+    }
+
+    public boolean isPractice() {
+        return practice;
+    }
+
+    public void setPractice(boolean practice) {
+        this.practice = practice;
+    }
+
+    public ArrayList<AttemptResult> getAttemts() {
+        return attemts;
     }
 
     public long getTimerStart() {
@@ -84,6 +100,9 @@ public class QuizApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(QuizApplication.class.getResource("main-menu.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 960, 540);
+
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+
         stage.setTitle("Quiz App");
         stage.setScene(scene);
         stage.show();
@@ -134,7 +153,7 @@ public class QuizApplication extends Application {
         if(!buttonType.isPresent() || !buttonType.get().equals(ButtonType.OK)) return;
 
         try {
-            saveQuizAttempt();
+            if(!practice) saveQuizAttempt();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("results-page.fxml"));
             Parent page = (Parent)loader.load();
@@ -175,6 +194,8 @@ public class QuizApplication extends Application {
 
             oldQuizResult.getResults().add(newAttempt);
 
+            attemts = oldQuizResult.getResults();
+
             PrintWriter writer = new PrintWriter(f, StandardCharsets.UTF_8);
             writer.print(objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(oldQuizResult));
             writer.close();
@@ -194,6 +215,8 @@ public class QuizApplication extends Application {
             newAttempt.setPoints(calcPoints(currentQuiz));
 
             quizResult.getResults().add(newAttempt);
+
+            attemts = quizResult.getResults();
 
             PrintWriter writer = new PrintWriter(f, StandardCharsets.UTF_8);
             writer.print(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(quizResult));

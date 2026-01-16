@@ -17,7 +17,7 @@
         <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="63.0" vgrow="ALWAYS" />
     </rowConstraints>
 
-    <Label text="Quiz Application" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="TOP">
+    <Label text="Quiz Application" styleClass="BigLabel" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="TOP">
         <font>
             <Font name="Arial Bold" size="21.0" />
         </font>
@@ -25,15 +25,20 @@
              <Insets left="10.0" top="10.0" />
           </GridPane.margin>
     </Label>
-   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-       <Button fx:id="loadQuizButton" text="Load Quiz" onAction="#OnLoadQuizButtonClick">
+   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+       <Button fx:id="loadQuizButton" onAction="#OnLoadQuizButtonClick" text="Load Quiz">
            <font>
                <Font name="System Bold" size="15.0" />
            </font>
        </Button>
-       <Button text="Exit" onAction="#OnExitButtonClick">
+       <Button onAction="#OnPracticeLoadQuizButtonClick" text="Practice Quiz">
+           <font>
+               <Font name="System Bold" size="15.0" />
+           </font>
+       </Button>
+       <Button onAction="#OnExitButtonClick" text="Exit">
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets />
          </VBox.margin>
          <font>
             <Font name="System Bold" size="15.0" />

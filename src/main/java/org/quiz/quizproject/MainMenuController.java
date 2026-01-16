@@ -17,6 +17,15 @@ public class MainMenuController {
 
     @FXML
     protected void OnLoadQuizButtonClick() {
+        loadQuiz(false);
+    }
+
+    public void OnPracticeLoadQuizButtonClick(){
+        loadQuiz(true);
+    }
+
+    private void loadQuiz(boolean practice)
+    {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select Quiz File");
         File f = chooser.showOpenDialog(loadQuizButton.getScene().getWindow());
@@ -40,12 +49,15 @@ public class MainMenuController {
             objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 
             Quiz quiz = objectMapper.readValue(json, Quiz.class);
+            if(practice) quiz.setTimeLimit(0); // if practice remove time limit
 
             var app = QuizApplication.getInstance();
 
             app.setOutputPath(f.getParent());
             app.setCurrentQuiz(quiz);
             app.replaceSceneContent("start-up.fxml");
+
+            app.setPractice(practice);
         }
         catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -55,6 +67,7 @@ public class MainMenuController {
             alert.showAndWait();
         }
     }
+
 
     @FXML
     protected void OnExitButtonClick() {

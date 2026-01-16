@@ -1,6 +1,7 @@
 package org.quiz.quizproject;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -86,6 +87,9 @@ public class QuizSingleChoiceController implements QuizController {
             radioButtons[i].setToggleGroup(scGroup);
 
             if(question.getIsAnswerSelected() && Objects.equals(radioButtons[i].getText(), question.getSelectedAnswer())) radioButtons[i].setSelected(true);
+
+            if(i == 0) VBox.setMargin(radioButtons[i], new Insets(4, 0, 0, 0));
+            else VBox.setMargin(radioButtons[i], new Insets(2, 0, 0, 0));
 
             vbox.getChildren().add(radioButtons[i]);
         }

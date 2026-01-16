@@ -1,10 +1,12 @@
 package org.quiz.quizproject;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class StartUpCotroller {
@@ -60,6 +62,9 @@ public class StartUpCotroller {
         else{
             timeLimitLabel.setText("This quiz has no time limit");
         }
+
+        //HBox timeLimitBox = new HBox(timeLimitLabel);
+        VBox.setMargin(timeLimitLabel, new Insets(0, 0, 10, 0));
 
         vbox.getChildren().add(timeLimitLabel);
 

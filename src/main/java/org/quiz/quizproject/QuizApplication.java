@@ -3,6 +3,7 @@ package org.quiz.quizproject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,11 +27,11 @@ public class QuizApplication extends Application {
 
     private String outputPath;
 
-    private ArrayList<Question> questions;
+    private boolean startt = false;
 
-    private Timer timer;
-    private long timerStart;
-    private long timerStop;
+//    private Timer timer;
+//    private long timerStart;
+//    private long timerStop;
 
     private boolean practice;
 
@@ -53,21 +55,21 @@ public class QuizApplication extends Application {
         return attemts;
     }
 
-    public long getTimerStart() {
-        return timerStart;
-    }
-
-    public void setTimerStart(long timerStart) {
-        this.timerStart = timerStart;
-    }
-
-    public long getTimerStop() {
-        return timerStop;
-    }
-
-    public void setTimerStop(long timerStop) {
-        this.timerStop = timerStop;
-    }
+//    public long getTimerStart() {
+//        return timerStart;
+//    }
+//
+//    public void setTimerStart(long timerStart) {
+//        this.timerStart = timerStart;
+//    }
+//
+//    public long getTimerStop() {
+//        return timerStop;
+//    }
+//
+//    public void setTimerStop(long timerStop) {
+//        this.timerStop = timerStop;
+//    }
 
     public String getOutputPath() {
         return outputPath;
@@ -98,6 +100,8 @@ public class QuizApplication extends Application {
         mainStage = stage;
         instance = this;
 
+        Platform.setImplicitExit(false);
+
         FXMLLoader fxmlLoader = new FXMLLoader(QuizApplication.class.getResource("main-menu.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 960, 540);
 
@@ -105,46 +109,77 @@ public class QuizApplication extends Application {
 
         stage.setTitle("Quiz App");
         stage.setScene(scene);
+
+
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                if(startt){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText("Would You Like To Save Your Console Output?");
+                    alert.setContentText("Please choose an option.");
+
+                    ButtonType yesButton = new ButtonType("Exit");
+                    ButtonType noButton = new ButtonType("Cancel");
+
+                    alert.getButtonTypes().setAll(yesButton, noButton);
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if(result.get() == yesButton)
+                    {
+                        event.consume();
+                    }
+
+                    //alert.showAndWait();
+                    //if(err.)
+                }
+
+            }
+        });
+
         stage.show();
     }
 
-    private void finishQuizTimer() throws IOException {
-        timerStop = System.currentTimeMillis();
-
-        saveQuizAttempt();
-
-        Platform.runLater(new Runnable() {
-            // Because this code is ran in different thread, in order for it to work, all UI changes has to be this way
-            @Override
-            public void run() {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("results-page.fxml"));
-                Parent page = null;
-
-                try {
-                    page = (Parent)loader.load();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-                ResultsPageController controller = loader.getController();
-
-                controller.init();
-
-                Scene scene = mainStage.getScene();
-                mainStage.getScene().setRoot(page);
-                mainStage.sizeToScene();
-            }
-        });
-    }
+//    private void finishQuizTimer() throws IOException {
+//        //timerStop = System.currentTimeMillis();
+//
+//        saveQuizAttempt();
+//
+//        Platform.runLater(new Runnable() {
+//            // Because this code is ran in different thread, in order for it to work, all UI changes has to be this way
+//            @Override
+//            public void run() {
+//                FXMLLoader loader = new FXMLLoader(getClass().getResource("results-page.fxml"));
+//                Parent page = null;
+//
+//                try {
+//                    page = (Parent)loader.load();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//                ResultsPageController controller = loader.getController();
+//
+//                controller.init();
+//
+//                Scene scene = mainStage.getScene();
+//                mainStage.getScene().setRoot(page);
+//                mainStage.sizeToScene();
+//            }
+//        });
+//    }
 
     public void finishQuiz(){
-        if(timer != null) {
-            timer.cancel(); // Stop timer
-        }
+//        if(timer != null) {
+//            timer.cancel(); // Stop timer
+//        }
+//
+//        timerStop = System.currentTimeMillis();
 
-        timerStop = System.currentTimeMillis();
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Quiz Ending:");
         alert.setHeaderText("Are you sure you want to end the quiz?");
 
@@ -162,6 +197,8 @@ public class QuizApplication extends Application {
 
             controller.init();
 
+            startt = false;
+
             Scene scene = mainStage.getScene();
             mainStage.getScene().setRoot(page);
             mainStage.sizeToScene();
@@ -177,7 +214,7 @@ public class QuizApplication extends Application {
     }
 
     private void saveQuizAttempt() throws IOException {
-        File f = new File(outputPath, currentQuiz.getId() + "-results.json");
+        File f = new File(outputPath, currentQuiz.getQuizId() + "-results.json");
 
         if(f.exists() && !f.isDirectory()) { // if file already exists read and deserialize it, then add new attempt and save all to file
             String oldJson = Files.readString(f.toPath());
@@ -190,7 +227,7 @@ public class QuizApplication extends Application {
 
             newAttempt.setPlayerName(participantName);
             newAttempt.setDate(new Date());
-            newAttempt.setPoints(calcPoints(currentQuiz));
+            //newAttempt.setPoints(calcPoints(currentQuiz));
 
             oldQuizResult.getResults().add(newAttempt);
 
@@ -203,16 +240,16 @@ public class QuizApplication extends Application {
         else { // if there is no file create new QuizResult, fill it in, and save it
             QuizResult quizResult = new QuizResult();
 
-            quizResult.setQuizId(currentQuiz.getId());
+            quizResult.setQuizId(currentQuiz.getQuizId());
             quizResult.setName(currentQuiz.getTitle());
-            quizResult.setMaxPoints(calcQuizMaxPoints(currentQuiz));
+            quizResult.setMaxPoints(currentQuiz.getPages().size());
             quizResult.setResults(new ArrayList<AttemptResult>());
 
             AttemptResult newAttempt = new AttemptResult();
 
             newAttempt.setPlayerName(participantName);
             newAttempt.setDate(new Date());
-            newAttempt.setPoints(calcPoints(currentQuiz));
+            //newAttempt.setPoints(calcPoints(currentQuiz));
 
             quizResult.getResults().add(newAttempt);
 
@@ -224,48 +261,30 @@ public class QuizApplication extends Application {
         }
     }
 
-    public int calcQuizMaxPoints(Quiz quiz) {
-        int maxPoints = 0;
-
-        for (int i = 0; i < quiz.getQuestions().length; i++){
-            maxPoints += quiz.getQuestions()[i].getPoints();
-        }
-
-        return maxPoints;
-    }
-
+//    public int calcQuizMaxPoints(Quiz quiz) {
+//        int maxPoints = 0;
+//
+//        for (int i = 0; i < quiz.getQuestions().length; i++){
+//            maxPoints += quiz.getQuestions()[i].getPoints();
+//        }
+//
+//        return maxPoints;
+//    }
+//
     public int calcPoints(Quiz quiz) {
         int points = 0;
 
-        for (int i = 0; i < quiz.getQuestions().length; i++){
-            points += quiz.getQuestions()[i].calcPoints();
+        for (int i = 0; i < quiz.getPages().size(); i++){
+            points += quiz.getPages().get(i).getQuestion().calPoints();
         }
 
         return points;
     }
 
     public void startQuiz(){
-        questions = new ArrayList<>(Arrays.asList(currentQuiz.getQuestions()));
-
-        if(currentQuiz.isMixQuestions()) Collections.shuffle(questions);
-
-        if(currentQuiz.getTimeLimit() > 0){ // Set timer
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    try {
-                        finishQuizTimer();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }, ((long)currentQuiz.getTimeLimit() * 60 * 1000));
-        }
+        startt = true;
 
         moveToQuestion(1);
-
-        timerStart = System.currentTimeMillis();
     }
 
     public void replaceSceneContent(String fxml) throws Exception {
@@ -282,10 +301,10 @@ public class QuizApplication extends Application {
     }
 
     public void moveToQuestion(int questionNumber){
-        Question cur = questions.get(questionNumber - 1);
+        QuestionWrapper cur = currentQuiz.getPages().get(questionNumber - 1);
 
         try{
-            switch (cur.getType()){
+            switch (cur.getQuestion().getType()){
                 case TrueFalse:
                     moveToQuestion("quiz-true-false.fxml" ,cur, questionNumber);
                     break;
@@ -312,18 +331,19 @@ public class QuizApplication extends Application {
         }
     }
 
-    private void moveToQuestion(String fxml, Question q, int questionNumber) throws IOException {
+    private void moveToQuestion(String fxml, QuestionWrapper q, int questionNumber) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
         Parent page = (Parent)loader.load();
 
         QuizController controller = loader.getController();
 
         controller.setQuestion(q);
-        controller.setMustSelect(currentQuiz.isAnswerRequired());
-        controller.setNumberOfQuestions(questions.size());
+        controller.setNumberOfQuestions(currentQuiz.getPages().size());
         controller.setQuestionNumber(questionNumber);
 
         controller.init();
+
+
 
         Scene scene = mainStage.getScene();
         mainStage.getScene().setRoot(page);

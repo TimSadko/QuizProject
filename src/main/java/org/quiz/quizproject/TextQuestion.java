@@ -5,25 +5,39 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TextQuestion extends Question {
     private final StringProperty txt = new SimpleStringProperty();
 
-    private String text;
+    private String title;
+    private String name;
 
     @JsonIgnore
     private final QuestionType type = QuestionType.Text;
 
-    private int points;
+    //private int points;
 
     private String[] correctAnswers;
     private String enteredAnswer;
     private boolean isAnswerSelected = false;
 
+    private boolean isRequired = true;
+
     public TextQuestion(){
 
+    }
+
+    @Override
+    public int calPoints(){
+        if(isAnswerSelected){
+            //return new ArrayList<String>(correctAnswers).contains(cleanString(enteredAnswer)) ? 1 : 0;
+
+        }
+
+        return 0;
     }
 
     @Override
@@ -62,21 +76,11 @@ public class TextQuestion extends Question {
 
     @Override
     public int getPoints() {
-        return points;
+        return 1;
     }
 
     public void setPoints(int points) {
-        this.points = points;
-    }
-
-    @Override
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        txt.set(text);
-        this.text = text;
+        //this.points = points;
     }
 
     @Override
@@ -84,13 +88,34 @@ public class TextQuestion extends Question {
         return type;
     }
 
-    @Override
-    public int calcPoints() {
-        if(!isAnswerSelected) return 0;
-        return Arrays.asList(correctAnswers).contains(cleanString(enteredAnswer)) ? points : 0;
-    }
-
     private String cleanString(String input){
         return input.toLowerCase().replaceAll("\\s+",""); // Remove
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
     }
 }

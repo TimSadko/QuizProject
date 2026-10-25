@@ -5,11 +5,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 public class QuizTrueFalseController implements QuizController {
-    private boolean mustSelect;
     private int numberOfQuestions;
     private int questionNumber;
 
     private TrueFalseQuestion question;
+    private int timeLimit;
 
     @FXML
     private Label questionNumberLabel;
@@ -50,7 +50,7 @@ public class QuizTrueFalseController implements QuizController {
         var rb = (RadioButton)tfGroup.getSelectedToggle();
 
         if(rb == null){
-            if(mustSelect && !noMessage){
+            if(question.isRequired() && !noMessage){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setContentText("An answer must be selected!");
 
@@ -74,7 +74,10 @@ public class QuizTrueFalseController implements QuizController {
         initButtons();
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
-        questionTextLabel.setText(question.getText());
+        questionTextLabel.setText(question.getTitle());
+
+        radioTrue.setText(question.getLabelTrue());
+        radioFalse.setText(question.getLabelFalse());
 
         tfGroup = new ToggleGroup();
 
@@ -88,40 +91,20 @@ public class QuizTrueFalseController implements QuizController {
     }
 
     private void initButtons(){
-        var btnNext = new Button();
-        btnNext.setText("next");
-        btnNext.setOnAction(e -> onNextButtonClick());
+        if(questionNumber == numberOfQuestions){
+            var btnFinish = new Button();
+            btnFinish.setText("finish");
+            btnFinish.setOnAction(e -> onFinishButtonClick());
 
-        if(questionNumber == 1) {
-            buttonsContainer.getChildren().add(btnNext);
+            buttonsContainer.getChildren().add(btnFinish);
         }
         else{
-            var btnPrev = new Button();
-            btnPrev.setText("previous");
-            btnPrev.setOnAction(e -> onPreviousButtonClick());
+            var btnNext = new Button();
+            btnNext.setText("next");
+            btnNext.setOnAction(e -> onNextButtonClick());
 
-            buttonsContainer.getChildren().add(btnPrev);
-
-            if(questionNumber == numberOfQuestions){
-                var btnFinish = new Button();
-                btnFinish.setText("finish");
-                btnFinish.setOnAction(e -> onFinishButtonClick());
-
-                buttonsContainer.getChildren().add(btnFinish);
-            }
-            else{
-                buttonsContainer.getChildren().add(btnNext);
-            }
+            buttonsContainer.getChildren().add(btnNext);
         }
-    }
-
-    public boolean isMustSelect() {
-        return mustSelect;
-    }
-
-    @Override
-    public void setMustSelect(boolean mustSelect) {
-        this.mustSelect = mustSelect;
     }
 
     public int getNumberOfQuestions() {
@@ -147,7 +130,8 @@ public class QuizTrueFalseController implements QuizController {
     }
 
     @Override
-    public void setQuestion(Question question) {
-        this.question = (TrueFalseQuestion) question;
+    public void setQuestion(QuestionWrapper q) {
+        this.question = (TrueFalseQuestion) q.getQuestion();
+        this.timeLimit = q.GetTimeLimit();
     }
 }

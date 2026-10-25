@@ -10,11 +10,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class QuizMultipleChoiceController implements QuizController {
-    private boolean mustSelect;
     private int numberOfQuestions;
     private int questionNumber;
 
     private MultipleChoiceQuestion question;
+
+    private int timeLimit;
 
     @FXML
     private Label questionNumberLabel;
@@ -62,7 +63,7 @@ public class QuizMultipleChoiceController implements QuizController {
 
         question.setIsAnswerSelected(atLeastOneSelected);
 
-        if(!atLeastOneSelected && mustSelect && !noMessage){
+        if(!atLeastOneSelected && question.isRequired() && !noMessage){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("An answer must be selected!");
 
@@ -79,13 +80,13 @@ public class QuizMultipleChoiceController implements QuizController {
         initButtons();
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
-        questionTextLabel.setText(question.getText() + " (Multiple answers may be chosen)");
+        questionTextLabel.setText(question.getTitle() + " (Multiple answers may be chosen)");
 
-        radioButtons = new RadioButton[question.getAnswers().length];
+        radioButtons = new RadioButton[question.getChoices().length];
 
         for(int i = 0; i < radioButtons.length; i++){
             radioButtons[i] = new RadioButton();
-            radioButtons[i].setText(question.getAnswers()[i]);
+            radioButtons[i].setText(question.getChoices()[i]);
 
             if(question.getIsAnswerSelected() && question.getSelectedAnswers().contains(radioButtons[i].getText())) radioButtons[i].setSelected(true);
 
@@ -97,40 +98,20 @@ public class QuizMultipleChoiceController implements QuizController {
     }
 
     private void initButtons(){
-        var btnNext = new Button();
-        btnNext.setText("next");
-        btnNext.setOnAction(e -> onNextButtonClick());
+        if(questionNumber == numberOfQuestions){
+            var btnFinish = new Button();
+            btnFinish.setText("finish");
+            btnFinish.setOnAction(e -> onFinishButtonClick());
 
-        if(questionNumber == 1) {
-            buttonsContainer.getChildren().add(btnNext);
+            buttonsContainer.getChildren().add(btnFinish);
         }
         else{
-            var btnPrev = new Button();
-            btnPrev.setText("previous");
-            btnPrev.setOnAction(e -> onPreviousButtonClick());
+            var btnNext = new Button();
+            btnNext.setText("next");
+            btnNext.setOnAction(e -> onNextButtonClick());
 
-            buttonsContainer.getChildren().add(btnPrev);
-
-            if(questionNumber == numberOfQuestions){
-                var btnFinish = new Button();
-                btnFinish.setText("finish");
-                btnFinish.setOnAction(e -> onFinishButtonClick());
-
-                buttonsContainer.getChildren().add(btnFinish);
-            }
-            else{
-                buttonsContainer.getChildren().add(btnNext);
-            }
+            buttonsContainer.getChildren().add(btnNext);
         }
-    }
-
-    public boolean isMustSelect() {
-        return mustSelect;
-    }
-
-    @Override
-    public void setMustSelect(boolean mustSelect) {
-        this.mustSelect = mustSelect;
     }
 
     public int getNumberOfQuestions() {
@@ -156,7 +137,8 @@ public class QuizMultipleChoiceController implements QuizController {
     }
 
     @Override
-    public void setQuestion(Question question) {
-        this.question = (MultipleChoiceQuestion)question;
+    public void setQuestion(QuestionWrapper q) {
+        this.question = (MultipleChoiceQuestion) q.getQuestion();
+        this.timeLimit = q.GetTimeLimit();
     }
 }

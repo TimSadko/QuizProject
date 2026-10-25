@@ -11,34 +11,40 @@ import java.util.Objects;
 public class SingleChoiceQuestion extends Question {
     private final StringProperty txt = new SimpleStringProperty();
 
-    private String text;
+    private String title;
+    private String name;
 
     @JsonIgnore
     private final QuestionType type = QuestionType.SingleChoice;
 
-    private int points;
+    //private int points;
 
-    private String[] answers;
+    private String choicesOrder = "";
+
+    private String[] choices;
 
     private String correctAnswer;
     private String selectedAnswer;
     private boolean isAnswerSelected = false;
+
+    private boolean isRequired = true;
 
     public SingleChoiceQuestion(){
 
     }
 
     @Override
+    public int calPoints(){
+        if(isAnswerSelected){
+            return correctAnswer.equals(selectedAnswer) ? 1 : 0;
+        }
+
+        return 0;
+    }
+
+    @Override
     public StringProperty textProperty(){
         return txt;
-    }
-
-    public String[] getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(String[] answers) {
-        this.answers = answers;
     }
 
     @Override
@@ -68,21 +74,11 @@ public class SingleChoiceQuestion extends Question {
 
     @Override
     public int getPoints() {
-        return points;
+        return 1;
     }
 
     public void setPoints(int points) {
-        this.points = points;
-    }
-
-    @Override
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        txt.set(text);
-        this.text = text;
+        //this.points = points;
     }
 
     @Override
@@ -91,7 +87,49 @@ public class SingleChoiceQuestion extends Question {
     }
 
     @Override
-    public int calcPoints() {
-        return isAnswerSelected ? Objects.equals(selectedAnswer, correctAnswer) ? points : 0 : 0;
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean getShuffleChoices(){
+        return choicesOrder.equals("random");
+    }
+
+    public String getChoicesOrder() {
+        return choicesOrder;
+    }
+
+    public void setChoicesOrder(String choicesOrder) {
+        this.choicesOrder = choicesOrder;
+    }
+
+    public String[] getChoices() {
+        return choices;
+    }
+
+    public void setChoices(String[] choices) {
+        this.choices = choices;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
     }
 }

@@ -56,14 +56,20 @@ public class StartUpCotroller {
 
         Label timeLimitLabel = new Label();
 
-        if(quiz.getTimeLimit() > 0){
-            timeLimitLabel.setText("This quiz has time limit: " + quiz.getTimeLimit() + " minutes");
+        if(quiz.isAllowRetry()){
+            timeLimitLabel.setText("This quiz allows retries");
         }
         else{
-            timeLimitLabel.setText("This quiz has no time limit");
+            timeLimitLabel.setText("This quiz does not allow retries");
         }
 
-        //HBox timeLimitBox = new HBox(timeLimitLabel);
+        //        if(quiz.getTimeLimit() > 0){
+        //            timeLimitLabel.setText("This quiz has time limit: " + quiz.getTimeLimit() + " minutes");
+        //        }
+        //        else{
+        //            timeLimitLabel.setText("This quiz has no time limit");
+        //        }
+
         VBox.setMargin(timeLimitLabel, new Insets(0, 0, 10, 0));
 
         vbox.getChildren().add(timeLimitLabel);

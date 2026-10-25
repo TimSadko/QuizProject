@@ -38,7 +38,7 @@ public class ResultsPageController {
             Label scoreLabel = new Label();
 
             int scoredPoints = app.calcPoints(quiz);
-            int maxPoints = app.calcQuizMaxPoints(quiz);
+            int maxPoints = quiz.getPages().size();
             double percentScore = Math.round((float)scoredPoints / maxPoints * 100.0);
 
             scoreLabel.setText("Your score is " + scoredPoints + "/" + maxPoints + ", = ~" + percentScore + "%");
@@ -47,31 +47,31 @@ public class ResultsPageController {
 
             infoBox.getChildren().add(scoreLabel);
 
-            if(quiz.getMinScore() > 0){
-                Label passingMessageLabel = new Label();
+//            if(quiz.getMinScore() > 0){
+//                Label passingMessageLabel = new Label();
+//
+//                if(quiz.getMinScore() <= scoredPoints){
+//                    passingMessageLabel.setText("You have passed)))");
+//                }
+//                else{
+//                    passingMessageLabel.setText("You have failed(((");
+//                }
+//
+//                VBox.setMargin(passingMessageLabel, new Insets(0, 0, 8, 0));
+//
+//                infoBox.getChildren().add(passingMessageLabel);
+//            }
 
-                if(quiz.getMinScore() <= scoredPoints){
-                    passingMessageLabel.setText("You have passed)))");
-                }
-                else{
-                    passingMessageLabel.setText("You have failed(((");
-                }
+//            Date date = new Date(app.getTimerStop() - app.getTimerStart() - 3600000);
+//            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+//            String dateFormatted = formatter.format(date);
+//
+//            Label labelTimePassed = new Label();
+//            labelTimePassed.setText("Quiz time: " + dateFormatted);
 
-                VBox.setMargin(passingMessageLabel, new Insets(0, 0, 8, 0));
+            //VBox.setMargin(labelTimePassed, new Insets(0, 0, 8, 0));
 
-                infoBox.getChildren().add(passingMessageLabel);
-            }
-
-            Date date = new Date(app.getTimerStop() - app.getTimerStart() - 3600000);
-            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-            String dateFormatted = formatter.format(date);
-
-            Label labelTimePassed = new Label();
-            labelTimePassed.setText("Quiz time: " + dateFormatted);
-
-            VBox.setMargin(labelTimePassed, new Insets(0, 0, 8, 0));
-
-            infoBox.getChildren().add(labelTimePassed);
+            //infoBox.getChildren().add(labelTimePassed);
 
             if(!app.isPractice()) {
                 app.getAttemts().sort(new Comparator<AttemptResult>() {
@@ -85,7 +85,7 @@ public class ResultsPageController {
 
                 for (int i = 0; i < app.getAttemts().size(); i++) {
                     cur = app.getAttemts().get(i);
-                    cur.propertyScorePercentProperty().set(Math.round((double) cur.getPoints() / maxPoints * 100) + "%");
+                    cur.propertyScorePercentProperty().set(Integer.toString(cur.getPoints()));
                 }
 
                 ObservableList<AttemptResult> observableAttemptsList = FXCollections.observableList(app.getAttemts());
@@ -145,8 +145,6 @@ public class ResultsPageController {
         var app = QuizApplication.getInstance();
         var quiz = app.getCurrentQuiz();
 
-        int maxPoints = app.calcQuizMaxPoints(quiz);
-
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try
@@ -155,13 +153,11 @@ public class ResultsPageController {
             for (AttemptResult attempt : app.getAttemts())
             {
                 StringBuffer oneLine = new StringBuffer();
-                oneLine.append(quiz.getId());
+                oneLine.append(quiz.getQuizId());
                 oneLine.append(";");
                 oneLine.append(quiz.getTitle());
                 oneLine.append(";");
                 oneLine.append(attempt.getPlayerName());
-                oneLine.append(";");
-                oneLine.append(maxPoints);
                 oneLine.append(";");
                 oneLine.append(attempt.getPoints());
                 oneLine.append(";");
@@ -175,7 +171,6 @@ public class ResultsPageController {
         catch (Exception ex){
             Alert err = new Alert(Alert.AlertType.ERROR);
             err.setTitle("An error has occurred:");
-            //err.setHeaderText(ex.getMessage());
             err.setContentText(ex.getMessage());
 
             err.showAndWait();

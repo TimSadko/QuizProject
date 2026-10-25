@@ -10,6 +10,9 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Random;
 
 public class MainMenuController {
     @FXML
@@ -49,7 +52,19 @@ public class MainMenuController {
             objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 
             Quiz quiz = objectMapper.readValue(json, Quiz.class);
-            if(practice) quiz.setTimeLimit(0); // if practice remove time limit
+            //if(practice) quiz.setTimeLimit(0); // if practice remove time limit
+
+            if(quiz.getRandomQuestionCount() > quiz.getPages().size()) throw new RuntimeException("Corrupt quiz file! Can not run quiz!");
+
+            if(quiz.getRandomQuestionCount() > 0){
+                Collections.shuffle(quiz.getPages());
+
+                int size = quiz.getPages().size();
+
+                for (int i = 0; i < size - quiz.getRandomQuestionCount(); i++) {
+                    quiz.getPages().remove(0);
+                }
+            }
 
             var app = QuizApplication.getInstance();
 

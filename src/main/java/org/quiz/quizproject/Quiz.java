@@ -1,34 +1,30 @@
 package org.quiz.quizproject;
 
-public class Quiz {
-    //private static final Quiz quiz = new Quiz();
+import java.util.ArrayList;
+import java.util.LinkedList;
 
-    private String id;
+public class Quiz {
+    private String quizId;
     private String title;
     private String description;
 
-    private int timeLimit; // Time limit in minutes. If <= 0, no time limit
-    private boolean mixQuestions; // Mix questions randomly if true
-    private int minScore; // If <= 0, no minimal passing score
-    private boolean showResults; // If false, the results of quiz will not be shown to participants (thou it still will be saved to the json results file)
-    private boolean answerRequired; // If true, the questions can not be left unanswered
+    private Boolean showResults; // If false, the results of quiz will not be shown to participants (though it still will be saved to the json results file)
 
-    private Question[] questions;
+    private Boolean allowRetry;
+    private Integer randomQuestionCount;
+
+    private ArrayList<QuestionWrapper> pages;
 
     public Quiz(){
 
     }
 
-//    public static Quiz getInstance(){
-//        return quiz;
-//    }
-
-    public String getId() {
-        return id;
+    public String getQuizId() {
+        return quizId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setQuizId(String quizId) {
+        this.quizId = quizId;
     }
 
     public String getTitle() {
@@ -47,14 +43,59 @@ public class Quiz {
         this.description = description;
     }
 
-    public int getTimeLimit() {
-        return timeLimit;
+
+    public boolean isShowResults() {
+        return showResults == null ? true : showResults;
     }
 
-    public void setTimeLimit(int timeLimit) {
-        this.timeLimit = timeLimit;
+    public void setShowResults(boolean showResults) {
+        this.showResults = showResults;
     }
 
+    public ArrayList<QuestionWrapper> getPages() {
+        return pages;
+    }
+
+    public boolean isAllowRetry() {
+        return allowRetry == null ? false : allowRetry;
+    }
+
+    public int getRandomQuestionCount() {
+        return randomQuestionCount == null ? 0 : randomQuestionCount;
+    }
+
+    public void setAllowRetry(boolean allowRetry) {
+        this.allowRetry = allowRetry;
+    }
+
+    public void setRandomQuestionCount(int randomQuestionCount) {
+        this.randomQuestionCount = randomQuestionCount;
+    }
+
+    public void setPages(ArrayList<QuestionWrapper> pages) {
+        this.pages = pages;
+    }
+
+    /*private int timeLimit; // Time limit in minutes. If <= 0, no time limit // Outdated
+    private boolean mixQuestions; // Mix questions randomly if true
+    private int minScore; // If <= 0, no minimal passing score
+    private boolean answerRequired; // If true, the questions can not be left unanswered
+
+        public int getTimeLimit() {
+            return timeLimit;
+        }
+
+        public void setTimeLimit(int timeLimit) {
+            this.timeLimit = timeLimit;
+        }
+
+        public boolean isAnswerRequired() {
+        return answerRequired;
+    }
+
+    public void setAnswerRequired(boolean answerRequired) {
+        this.answerRequired = answerRequired;
+    }
     public boolean isMixQuestions() {
         return mixQuestions;
     }
@@ -71,27 +112,5 @@ public class Quiz {
         this.minScore = minScore;
     }
 
-    public boolean isShowResults() {
-        return showResults;
-    }
-
-    public void setShowResults(boolean showResults) {
-        this.showResults = showResults;
-    }
-
-    public boolean isAnswerRequired() {
-        return answerRequired;
-    }
-
-    public void setAnswerRequired(boolean answerRequired) {
-        this.answerRequired = answerRequired;
-    }
-
-    public Question[] getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Question[] questions) {
-        this.questions = questions;
-    }
+     */
 }

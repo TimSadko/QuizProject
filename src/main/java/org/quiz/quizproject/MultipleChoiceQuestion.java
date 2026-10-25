@@ -12,34 +12,42 @@ import java.util.Arrays;
 public class MultipleChoiceQuestion extends Question {
     private final StringProperty txt = new SimpleStringProperty();
 
-    private String text;
+    private String title;
+    private String name;
 
     @JsonIgnore
     private final QuestionType type = QuestionType.MultipleChoice;
 
-    private int points;
+    //private int points;
 
-    private String[] answers;
+    private String[] choices;
+
+    private String choicesOrder = "";
 
     private String[] correctAnswers;
     private ArrayList<String> selectedAnswers = new ArrayList<String>();
     private boolean isAnswerSelected = false;
+
+    private boolean isRequired  = true;
 
     public MultipleChoiceQuestion(){
 
     }
 
     @Override
+    public int calPoints(){
+        if(isAnswerSelected){
+            if(correctAnswers.length != selectedAnswers.size()) return 0;
+
+            return correctAnswers.length == selectedAnswers.size() && selectedAnswers.containsAll(Arrays.asList(correctAnswers)) ? 1 : 0;
+        }
+
+        return 0;
+    }
+
+    @Override
     public StringProperty textProperty(){
         return txt;
-    }
-
-    public String[] getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(String[] answers) {
-        this.answers = answers;
     }
 
     @Override
@@ -69,21 +77,11 @@ public class MultipleChoiceQuestion extends Question {
 
     @Override
     public int getPoints() {
-        return points;
+        return 1;
     }
 
     public void setPoints(int points) {
-        this.points = points;
-    }
-
-    @Override
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        txt.set(text);
-        this.text = text;
+        //this.points = points;
     }
 
     @Override
@@ -92,9 +90,45 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     @Override
-    public int calcPoints() {
-        if(!isAnswerSelected) return 0;
-        if(correctAnswers.length == selectedAnswers.size() && selectedAnswers.containsAll(Arrays.asList(correctAnswers))) return points;
-        else return 0;
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String[] getChoices() {
+        return choices;
+    }
+
+    public void setChoices(String[] choices) {
+        this.choices = choices;
+    }
+
+    public String getChoicesOrder() {
+        return choicesOrder;
+    }
+
+    public void setChoicesOrder(String choicesOrder) {
+        this.choicesOrder = choicesOrder;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
     }
 }

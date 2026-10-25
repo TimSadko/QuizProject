@@ -9,11 +9,12 @@ import javafx.scene.layout.VBox;
 import java.util.Objects;
 
 public class QuizSingleChoiceController implements QuizController {
-    private boolean mustSelect;
     private int numberOfQuestions;
     private int questionNumber;
 
     private SingleChoiceQuestion question;
+
+    private int timeLimit;
 
     @FXML
     private Label questionNumberLabel;
@@ -54,7 +55,7 @@ public class QuizSingleChoiceController implements QuizController {
         var rb = (RadioButton)scGroup.getSelectedToggle();
 
         if(rb == null){
-            if(mustSelect && !noMessage){
+            if(question.isRequired() && !noMessage){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setContentText("An answer must be selected!");
 
@@ -77,13 +78,13 @@ public class QuizSingleChoiceController implements QuizController {
         initButtons();
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
-        questionTextLabel.setText(question.getText());
+        questionTextLabel.setText(question.getTitle());
 
-        radioButtons = new RadioButton[question.getAnswers().length];
+        radioButtons = new RadioButton[question.getChoices().length];
 
         for(int i = 0; i < radioButtons.length; i++){
             radioButtons[i] = new RadioButton();
-            radioButtons[i].setText(question.getAnswers()[i]);
+            radioButtons[i].setText(question.getChoices()[i]);
             radioButtons[i].setToggleGroup(scGroup);
 
             if(question.getIsAnswerSelected() && Objects.equals(radioButtons[i].getText(), question.getSelectedAnswer())) radioButtons[i].setSelected(true);
@@ -96,40 +97,42 @@ public class QuizSingleChoiceController implements QuizController {
     }
 
     private void initButtons(){
-        var btnNext = new Button();
-        btnNext.setText("next");
-        btnNext.setOnAction(e -> onNextButtonClick());
+        if(questionNumber == numberOfQuestions){
+            var btnFinish = new Button();
+            btnFinish.setText("finish");
+            btnFinish.setOnAction(e -> onFinishButtonClick());
 
-        if(questionNumber == 1) {
-            buttonsContainer.getChildren().add(btnNext);
+            buttonsContainer.getChildren().add(btnFinish);
         }
         else{
-            var btnPrev = new Button();
-            btnPrev.setText("previous");
-            btnPrev.setOnAction(e -> onPreviousButtonClick());
+            var btnNext = new Button();
+            btnNext.setText("next");
+            btnNext.setOnAction(e -> onNextButtonClick());
 
-            buttonsContainer.getChildren().add(btnPrev);
-
-            if(questionNumber == numberOfQuestions){
-                var btnFinish = new Button();
-                btnFinish.setText("finish");
-                btnFinish.setOnAction(e -> onFinishButtonClick());
-
-                buttonsContainer.getChildren().add(btnFinish);
-            }
-            else{
-                buttonsContainer.getChildren().add(btnNext);
-            }
+            buttonsContainer.getChildren().add(btnNext);
         }
-    }
 
-    public boolean isMustSelect() {
-        return mustSelect;
-    }
-
-    @Override
-    public void setMustSelect(boolean mustSelect) {
-        this.mustSelect = mustSelect;
+//        if(questionNumber == 1) {
+//            buttonsContainer.getChildren().add(btnNext);
+//        }
+//        else{
+//            var btnPrev = new Button();
+//            btnPrev.setText("previous");
+//            btnPrev.setOnAction(e -> onPreviousButtonClick());
+//
+//            buttonsContainer.getChildren().add(btnPrev);
+//
+//            if(questionNumber == numberOfQuestions){
+//                var btnFinish = new Button();
+//                btnFinish.setText("finish");
+//                btnFinish.setOnAction(e -> onFinishButtonClick());
+//
+//                buttonsContainer.getChildren().add(btnFinish);
+//            }
+//            else{
+//                buttonsContainer.getChildren().add(btnNext);
+//            }
+//        }
     }
 
     public int getNumberOfQuestions() {
@@ -155,7 +158,8 @@ public class QuizSingleChoiceController implements QuizController {
     }
 
     @Override
-    public void setQuestion(Question question) {
-        this.question = (SingleChoiceQuestion)question;
+    public void setQuestion(QuestionWrapper q) {
+        this.question = (SingleChoiceQuestion) q.getQuestion();
+        this.timeLimit = q.GetTimeLimit();
     }
 }

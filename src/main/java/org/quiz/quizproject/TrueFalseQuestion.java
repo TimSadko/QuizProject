@@ -9,18 +9,33 @@ import javafx.beans.property.StringProperty;
 public class TrueFalseQuestion extends Question {
     private final StringProperty txt = new SimpleStringProperty();
 
-    private String text;
+    private String title;
+    private String name;
+
+    private String labelTrue;
+    private String labelFalse;
 
     @JsonIgnore
     private final QuestionType type = QuestionType.TrueFalse;
-    private int points;
+
+    //private int points;
 
     private boolean correctAnswer;
     private boolean selectedAnswer;
     private boolean isAnswerSelected = false;
+    private boolean isRequired = true;
 
     public TrueFalseQuestion(){
 
+    }
+
+    @Override
+    public int calPoints(){
+        if(isAnswerSelected){
+            return correctAnswer == selectedAnswer ? 1 : 0;
+        }
+
+        return 0;
     }
 
     @Override
@@ -55,21 +70,21 @@ public class TrueFalseQuestion extends Question {
 
     @Override
     public int getPoints() {
-        return points;
+        return 1;
     }
 
     public void setPoints(int points) {
-        this.points = points;
+        //this.points = points;
     }
 
     @Override
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
-    public void setText(String text) {
-        txt.set(text);
-        this.text = text;
+    public void setTitle(String title) {
+        txt.set(title);
+        this.title = title;
     }
 
     @Override
@@ -78,7 +93,45 @@ public class TrueFalseQuestion extends Question {
     }
 
     @Override
-    public int calcPoints() {
-        return isAnswerSelected ? selectedAnswer == correctAnswer ? points : 0 : 0;
+    public String getName() {
+        return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLabelTrue() {
+        return labelTrue;
+    }
+
+    public void setLabelTrue(String labelTrue) {
+        this.labelTrue = labelTrue;
+    }
+
+    public String getLabelFalse() {
+        return labelFalse;
+    }
+
+    public void setLabelFalse(String labelFalse) {
+        this.labelFalse = labelFalse;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
+    }
+
+//    @Override
+//    public int getPoints() {
+//        return points;
+//    }
+//
+//    public void setPoints(int points) {
+//        this.points = points;
+//    }
 }

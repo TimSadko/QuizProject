@@ -10,7 +10,7 @@
     -fx-border-radius: 4px;
 }
 
-.BigLabel {
+.big-label {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -34,6 +34,12 @@
 
     -fx-background-color: #0e0e0e;
     -fx-background-insets: 0;
+}
+
+.result-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
 }
 
 .table-view{

@@ -1,4 +1,4 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.models;
 
 public class QuestionWrapper {
     private Question[] elements;

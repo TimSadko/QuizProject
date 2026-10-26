@@ -1,4 +1,4 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.StartUpCotroller">
+<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.controller.StartUpController">
     <rowConstraints>
         <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="19.999996185302734" vgrow="ALWAYS" />
         <RowConstraints maxHeight="234.8" minHeight="10.0" prefHeight="233.8" vgrow="ALWAYS" />
@@ -17,14 +17,16 @@
     </columnConstraints>
     <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <Label fx:id="quizNameLabel">
-         <VBox.margin>
-            <Insets bottom="10.0" />
-         </VBox.margin></Label>
+             <VBox.margin>
+                <Insets bottom="10.0" />
+             </VBox.margin>
+        </Label>
 
         <Label>Enter Your Name:</Label>
         <TextField fx:id="nameTextField">
-         <VBox.margin>
-            <Insets bottom="3.0" top="3.0" />
-         </VBox.margin></TextField>
+             <VBox.margin>
+                <Insets bottom="3.0" top="3.0" />
+             </VBox.margin>
+        </TextField>
     </VBox>
 </GridPane>

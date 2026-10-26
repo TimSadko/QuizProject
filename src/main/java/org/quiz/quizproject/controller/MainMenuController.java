@@ -1,4 +1,4 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,27 +7,22 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
+import org.quiz.quizproject.QuizApplication;
+import org.quiz.quizproject.models.Quiz;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
 
 public class MainMenuController {
     @FXML
     private Button loadQuizButton;
 
     @FXML
-    protected void OnLoadQuizButtonClick() {
-        loadQuiz(false);
+    protected void onLoadQuizButtonClick() {
+        loadQuiz();
     }
 
-    public void OnPracticeLoadQuizButtonClick(){
-        loadQuiz(true);
-    }
-
-    private void loadQuiz(boolean practice)
+    private void loadQuiz()
     {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select Quiz File");
@@ -49,35 +44,23 @@ public class MainMenuController {
             ObjectMapper objectMapper = new ObjectMapper();
             // Question have a field type, it will try to set it, because it is final it will fail, this config is to prevent it from failing
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             Quiz quiz = objectMapper.readValue(json, Quiz.class);
-            //if(practice) quiz.setTimeLimit(0); // if practice remove time limit
 
-            if(quiz.getRandomQuestionCount() > quiz.getPages().size()) throw new RuntimeException("Corrupt quiz file! Can not run quiz!");
-
-            if(quiz.getRandomQuestionCount() > 0){
-                Collections.shuffle(quiz.getPages());
-
-                int size = quiz.getPages().size();
-
-                for (int i = 0; i < size - quiz.getRandomQuestionCount(); i++) {
-                    quiz.getPages().remove(0);
-                }
-            }
+            if(quiz.getPages() == null || quiz.getPages().isEmpty()) throw new ClassCastException();
 
             var app = QuizApplication.getInstance();
 
             app.setOutputPath(f.getParent());
             app.setCurrentQuiz(quiz);
             app.replaceSceneContent("start-up.fxml");
-
-            app.setPractice(practice);
         }
         catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("An error has occurred:");
-            alert.setHeaderText(ex.getMessage());
+            alert.setHeaderText("Failed to read selected quiz!");
+            alert.setContentText("Selected quiz uses unsupported format, or is corrupted. Make sure you have selected the correct quiz.");
 
             alert.showAndWait();
         }
@@ -85,7 +68,7 @@ public class MainMenuController {
 
 
     @FXML
-    protected void OnExitButtonClick() {
+    protected void onExitButtonClick() {
         Platform.exit();
     }
 }

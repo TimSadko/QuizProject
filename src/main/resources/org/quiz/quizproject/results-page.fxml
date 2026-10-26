@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.ResultsPageController">
+<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.controller.ResultsPageController">
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="162.0" minWidth="5.0" prefWidth="127.0" />
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="100.0" prefWidth="223.00000000000003" />
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="162.0" minWidth="5.0" prefWidth="127.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="2.0" prefWidth="127.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="250.0" prefWidth="223.00000000000003" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="2.0" prefWidth="127.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="15.0" vgrow="NEVER" />
-        <RowConstraints maxHeight="Infinity" minHeight="20.0" prefHeight="216.8" vgrow="ALWAYS" />
-        <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="15.0" vgrow="NEVER" />
+        <RowConstraints maxHeight="Infinity" minHeight="1.0" prefHeight="15.0" vgrow="NEVER" />
+        <RowConstraints maxHeight="Infinity" minHeight="2.0" prefHeight="216.8" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="Infinity" minHeight="1.0" prefHeight="15.0" vgrow="NEVER" />
     </rowConstraints>
 
-    <VBox fx:id="infoBox" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" alignment="CENTER_LEFT">
+    <VBox fx:id="infoBox" alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
         <Label text="The test is complete!" />
+        <Label fx:id="quizNameLabel">
+         <opaqueInsets>
+            <Insets bottom="8.0" />
+         </opaqueInsets></Label>
+        <Label fx:id="quizScoreLabel" styleClass="result-label">
+         <opaqueInsets>
+            <Insets bottom="2.0" />
+         </opaqueInsets></Label>
+        <TableView fx:id="scoreBoard" prefHeight="200.0" prefWidth="200.0" styleClass="table-view">
+        </TableView>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <Button onAction="#onQuitButtonClick" text="Quit" />
+            <Button onAction="#onExportCSVButtonClick" text="Export Scoreboard">
+                <HBox.margin>
+                   <Insets left="3.0" />
+                </HBox.margin>
+            </Button>
+            <Button onAction="#onQuizAgainButtonClick" text="Quiz Again">
+                <HBox.margin>
+                    <Insets left="3.0" />
+                </HBox.margin>
+            </Button>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets top="3.0" />
+         </VBox.margin>
+        </HBox>
     </VBox>
 </GridPane>

@@ -1,4 +1,4 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,8 +18,6 @@ public class TrueFalseQuestion extends Question {
     @JsonIgnore
     private final QuestionType type = QuestionType.TrueFalse;
 
-    //private int points;
-
     private boolean correctAnswer;
     private boolean selectedAnswer;
     private boolean isAnswerSelected = false;
@@ -30,12 +28,12 @@ public class TrueFalseQuestion extends Question {
     }
 
     @Override
-    public int calPoints(){
+    public boolean isAnswerCorrect(){
         if(isAnswerSelected){
-            return correctAnswer == selectedAnswer ? 1 : 0;
+            return correctAnswer == selectedAnswer;
         }
 
-        return 0;
+        return false;
     }
 
     @Override
@@ -66,15 +64,6 @@ public class TrueFalseQuestion extends Question {
 
     public void setCorrectAnswer(boolean correctAnswer) {
         this.correctAnswer = correctAnswer;
-    }
-
-    @Override
-    public int getPoints() {
-        return 1;
-    }
-
-    public void setPoints(int points) {
-        //this.points = points;
     }
 
     @Override

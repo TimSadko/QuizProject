@@ -1,10 +1,13 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.controller;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.quiz.quizproject.QuizApplication;
+import org.quiz.quizproject.models.QuestionWrapper;
+import org.quiz.quizproject.models.SingleChoiceQuestion;
 
 import java.util.Objects;
 

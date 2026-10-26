@@ -1,20 +1,17 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.controller;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import org.quiz.quizproject.QuizApplication;
+import org.quiz.quizproject.models.QuestionWrapper;
+import org.quiz.quizproject.models.TrueFalseQuestion;
 
-public class QuizMultipleChoiceController implements QuizController {
+public class QuizTrueFalseController implements QuizController {
     private int numberOfQuestions;
     private int questionNumber;
 
-    private MultipleChoiceQuestion question;
-
+    private TrueFalseQuestion question;
     private int timeLimit;
 
     @FXML
@@ -27,9 +24,12 @@ public class QuizMultipleChoiceController implements QuizController {
     private HBox buttonsContainer;
 
     @FXML
-    private VBox vbox;
+    private RadioButton radioTrue;
 
-    private RadioButton[] radioButtons;
+    @FXML
+    private RadioButton radioFalse;
+
+    private ToggleGroup tfGroup;
 
     public void onPreviousButtonClick(){
         saveAnswer(true);
@@ -50,27 +50,24 @@ public class QuizMultipleChoiceController implements QuizController {
     }
 
     private boolean saveAnswer(boolean noMessage){
-        boolean atLeastOneSelected = false;
+        var rb = (RadioButton)tfGroup.getSelectedToggle();
 
-        question.getSelectedAnswers().clear();
+        if(rb == null){
+            if(question.isRequired() && !noMessage){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("An answer must be selected!");
 
-        for (int i = 0; i < radioButtons.length; i++){
-            if(radioButtons[i].isSelected()){
-                atLeastOneSelected = true;
-                question.getSelectedAnswers().add(radioButtons[i].getText());
+                alert.show();
+
+                return false;
             }
+
+            return true;
         }
 
-        question.setIsAnswerSelected(atLeastOneSelected);
+        question.setIsAnswerSelected(true);
 
-        if(!atLeastOneSelected && question.isRequired() && !noMessage){
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("An answer must be selected!");
-
-            alert.show();
-
-            return false;
-        }
+        question.setSelectedAnswer(rb == radioTrue);
 
         return true;
     }
@@ -80,20 +77,19 @@ public class QuizMultipleChoiceController implements QuizController {
         initButtons();
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
-        questionTextLabel.setText(question.getTitle() + " (Multiple answers may be chosen)");
+        questionTextLabel.setText(question.getTitle());
 
-        radioButtons = new RadioButton[question.getChoices().length];
+        radioTrue.setText(question.getLabelTrue());
+        radioFalse.setText(question.getLabelFalse());
 
-        for(int i = 0; i < radioButtons.length; i++){
-            radioButtons[i] = new RadioButton();
-            radioButtons[i].setText(question.getChoices()[i]);
+        tfGroup = new ToggleGroup();
 
-            if(question.getIsAnswerSelected() && question.getSelectedAnswers().contains(radioButtons[i].getText())) radioButtons[i].setSelected(true);
+        radioFalse.setToggleGroup(tfGroup);
+        radioTrue.setToggleGroup(tfGroup);
 
-            if(i == 0) VBox.setMargin(radioButtons[i], new Insets(4, 0, 0, 0));
-            else VBox.setMargin(radioButtons[i], new Insets(2, 0, 0, 0));
-
-            vbox.getChildren().add(radioButtons[i]);
+        if(question.getIsAnswerSelected()){
+            if(question.getSelectedAnswer()) radioTrue.setSelected(true);
+            else radioFalse.setSelected(true);
         }
     }
 
@@ -132,13 +128,13 @@ public class QuizMultipleChoiceController implements QuizController {
         this.questionNumber = questionNumber;
     }
 
-    public MultipleChoiceQuestion getQuestion() {
+    public TrueFalseQuestion getQuestion() {
         return question;
     }
 
     @Override
     public void setQuestion(QuestionWrapper q) {
-        this.question = (MultipleChoiceQuestion) q.getQuestion();
+        this.question = (TrueFalseQuestion) q.getQuestion();
         this.timeLimit = q.GetTimeLimit();
     }
 }

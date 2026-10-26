@@ -1,45 +1,46 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SingleChoiceQuestion extends Question {
+public class MultipleChoiceQuestion extends Question {
     private final StringProperty txt = new SimpleStringProperty();
 
     private String title;
     private String name;
 
     @JsonIgnore
-    private final QuestionType type = QuestionType.SingleChoice;
-
-    //private int points;
-
-    private String choicesOrder = "";
+    private final QuestionType type = QuestionType.MultipleChoice;
 
     private String[] choices;
 
-    private String correctAnswer;
-    private String selectedAnswer;
+    private String choicesOrder = "";
+
+    private String[] correctAnswers;
+    private ArrayList<String> selectedAnswers = new ArrayList<String>();
     private boolean isAnswerSelected = false;
 
-    private boolean isRequired = true;
+    private boolean isRequired  = true;
 
-    public SingleChoiceQuestion(){
+    public MultipleChoiceQuestion(){
 
     }
 
     @Override
-    public int calPoints(){
+    public boolean isAnswerCorrect(){
         if(isAnswerSelected){
-            return correctAnswer.equals(selectedAnswer) ? 1 : 0;
+            if(correctAnswers.length != selectedAnswers.size()) return false;
+
+            return correctAnswers.length == selectedAnswers.size() && selectedAnswers.containsAll(Arrays.asList(correctAnswers));
         }
 
-        return 0;
+        return false;
     }
 
     @Override
@@ -56,29 +57,20 @@ public class SingleChoiceQuestion extends Question {
         this.isAnswerSelected = isAnswerSelected;
     }
 
-    public String getSelectedAnswer() {
-        return selectedAnswer;
+    public ArrayList<String> getSelectedAnswers() {
+        return selectedAnswers;
     }
 
-    public void setSelectedAnswer(String selectedAnswer) {
-        this.selectedAnswer = selectedAnswer;
+    public void setSelectedAnswers(ArrayList<String> selectedAnswers) {
+        this.selectedAnswers = selectedAnswers;
     }
 
-    public String getCorrectAnswer() {
-        return correctAnswer;
+    public String[] getCorrectAnswers() {
+        return correctAnswers;
     }
 
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
-    @Override
-    public int getPoints() {
-        return 1;
-    }
-
-    public void setPoints(int points) {
-        //this.points = points;
+    public void setCorrectAnswers(String[] correctAnswers) {
+        this.correctAnswers = correctAnswers;
     }
 
     @Override
@@ -104,8 +96,12 @@ public class SingleChoiceQuestion extends Question {
         this.name = name;
     }
 
-    public boolean getShuffleChoices(){
-        return choicesOrder.equals("random");
+    public String[] getChoices() {
+        return choices;
+    }
+
+    public void setChoices(String[] choices) {
+        this.choices = choices;
     }
 
     public String getChoicesOrder() {
@@ -114,14 +110,6 @@ public class SingleChoiceQuestion extends Question {
 
     public void setChoicesOrder(String choicesOrder) {
         this.choicesOrder = choicesOrder;
-    }
-
-    public String[] getChoices() {
-        return choices;
-    }
-
-    public void setChoices(String[] choices) {
-        this.choices = choices;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.controller;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -6,10 +6,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.quiz.quizproject.QuizApplication;
 
-public class StartUpCotroller {
+public class StartUpController {
     @FXML
     private Label quizNameLabel;
 
@@ -24,7 +24,7 @@ public class StartUpCotroller {
         String name = nameTextField.getText().toLowerCase().trim();
 
         try{
-            if(name.length() > 2){
+            if(name.length() > 1){
                 var app = QuizApplication.getInstance();
 
                 app.setParticipantName(name);
@@ -34,7 +34,7 @@ public class StartUpCotroller {
             else{
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Name is empty!");
-                alert.setHeaderText("Name has to have at least 2 characters excluding spaces");
+                alert.setHeaderText("Name has to have at least 1 characters excluding spaces");
 
                 alert.showAndWait();
             }
@@ -55,20 +55,6 @@ public class StartUpCotroller {
         quizNameLabel.setText(quiz.getTitle());
 
         Label timeLimitLabel = new Label();
-
-        if(quiz.isAllowRetry()){
-            timeLimitLabel.setText("This quiz allows retries");
-        }
-        else{
-            timeLimitLabel.setText("This quiz does not allow retries");
-        }
-
-        //        if(quiz.getTimeLimit() > 0){
-        //            timeLimitLabel.setText("This quiz has time limit: " + quiz.getTimeLimit() + " minutes");
-        //        }
-        //        else{
-        //            timeLimitLabel.setText("This quiz has no time limit");
-        //        }
 
         VBox.setMargin(timeLimitLabel, new Insets(0, 0, 10, 0));
 

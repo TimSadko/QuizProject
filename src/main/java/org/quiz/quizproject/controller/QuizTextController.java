@@ -1,14 +1,21 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import org.quiz.quizproject.QuizApplication;
+import org.quiz.quizproject.models.QuestionWrapper;
+import org.quiz.quizproject.models.TextQuestion;
 
-public class QuizTrueFalseController implements QuizController {
+public class QuizTextController implements QuizController {
     private int numberOfQuestions;
     private int questionNumber;
 
-    private TrueFalseQuestion question;
+    private TextQuestion question;
+
     private int timeLimit;
 
     @FXML
@@ -21,12 +28,7 @@ public class QuizTrueFalseController implements QuizController {
     private HBox buttonsContainer;
 
     @FXML
-    private RadioButton radioTrue;
-
-    @FXML
-    private RadioButton radioFalse;
-
-    private ToggleGroup tfGroup;
+    private TextField textField;
 
     public void onPreviousButtonClick(){
         saveAnswer(true);
@@ -47,24 +49,17 @@ public class QuizTrueFalseController implements QuizController {
     }
 
     private boolean saveAnswer(boolean noMessage){
-        var rb = (RadioButton)tfGroup.getSelectedToggle();
+        if(textField.getText().trim().length() <= 1 && question.isRequired() && !noMessage){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("An answer must be selected!");
 
-        if(rb == null){
-            if(question.isRequired() && !noMessage){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("An answer must be selected!");
+            alert.show();
 
-                alert.show();
-
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         question.setIsAnswerSelected(true);
-
-        question.setSelectedAnswer(rb == radioTrue);
+        question.setEnteredAnswer(textField.getText());
 
         return true;
     }
@@ -76,18 +71,7 @@ public class QuizTrueFalseController implements QuizController {
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
         questionTextLabel.setText(question.getTitle());
 
-        radioTrue.setText(question.getLabelTrue());
-        radioFalse.setText(question.getLabelFalse());
-
-        tfGroup = new ToggleGroup();
-
-        radioFalse.setToggleGroup(tfGroup);
-        radioTrue.setToggleGroup(tfGroup);
-
-        if(question.getIsAnswerSelected()){
-            if(question.getSelectedAnswer()) radioTrue.setSelected(true);
-            else radioFalse.setSelected(true);
-        }
+        if(question.getIsAnswerSelected()) textField.setText(question.getEnteredAnswer());
     }
 
     private void initButtons(){
@@ -125,13 +109,13 @@ public class QuizTrueFalseController implements QuizController {
         this.questionNumber = questionNumber;
     }
 
-    public TrueFalseQuestion getQuestion() {
+    public TextQuestion getQuestion() {
         return question;
     }
 
     @Override
     public void setQuestion(QuestionWrapper q) {
-        this.question = (TrueFalseQuestion) q.getQuestion();
+        this.question = (TextQuestion) q.getQuestion();
         this.timeLimit = q.GetTimeLimit();
     }
 }

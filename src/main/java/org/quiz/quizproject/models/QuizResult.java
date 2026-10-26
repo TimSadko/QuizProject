@@ -1,11 +1,12 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.models;
+
+import org.quiz.quizproject.models.AttemptResult;
 
 import java.util.ArrayList;
 
 public class QuizResult {
     private String quizId;
     private String name;
-    private int maxPoints;
 
     private ArrayList<AttemptResult> results;
 
@@ -25,14 +26,6 @@ public class QuizResult {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getMaxPoints() {
-        return maxPoints;
-    }
-
-    public void setMaxPoints(int maxPoints) {
-        this.maxPoints = maxPoints;
     }
 
     public ArrayList<AttemptResult> getResults() {

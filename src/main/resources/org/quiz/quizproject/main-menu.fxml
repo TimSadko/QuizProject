@@ -5,38 +5,34 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.MainMenuController">
+<GridPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="270" prefWidth="480" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.quiz.quizproject.controller.MainMenuController">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="91.0" minHeight="10.0" prefHeight="71.0" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="91.0" minHeight="71.0" prefHeight="71.0" vgrow="ALWAYS" />
         <RowConstraints maxHeight="141.6" minHeight="10.0" prefHeight="138.6" vgrow="ALWAYS" />
         <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="63.0" vgrow="ALWAYS" />
     </rowConstraints>
 
-    <Label text="Quiz Application" styleClass="BigLabel" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="TOP">
-        <font>
-            <Font name="Arial Bold" size="21.0" />
-        </font>
-          <GridPane.margin>
-             <Insets left="10.0" top="10.0" />
-          </GridPane.margin>
-    </Label>
+    <HBox alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="0" GridPane.valignment="TOP">
+        <Label text="Quiz Application" styleClass="big-label">
+            <font>
+                <Font name="Arial Bold" size="21.0" />
+            </font>
+        </Label>
+    </HBox>
+
+
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-       <Button fx:id="loadQuizButton" onAction="#OnLoadQuizButtonClick" text="Load Quiz">
+       <Button fx:id="loadQuizButton" onAction="#onLoadQuizButtonClick" text="Load Quiz">
            <font>
                <Font name="System Bold" size="15.0" />
            </font>
        </Button>
-       <Button onAction="#OnPracticeLoadQuizButtonClick" text="Practice Quiz">
-           <font>
-               <Font name="System Bold" size="15.0" />
-           </font>
-       </Button>
-       <Button onAction="#OnExitButtonClick" text="Exit">
+       <Button onAction="#onExitButtonClick" text="Exit">
          <VBox.margin>
             <Insets />
          </VBox.margin>

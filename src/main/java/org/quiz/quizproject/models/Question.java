@@ -1,4 +1,4 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -25,8 +25,7 @@ public abstract class Question {
     public abstract StringProperty textProperty();
     public abstract String getTitle();
     public abstract QuestionType getType();
-    public abstract int getPoints();
-    public abstract int calPoints();
+    public abstract boolean isAnswerCorrect();
     // public abstract int calcPoints();
 
     public abstract String getName();

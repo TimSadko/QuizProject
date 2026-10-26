@@ -1,12 +1,9 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TextQuestion extends Question {
@@ -31,13 +28,8 @@ public class TextQuestion extends Question {
     }
 
     @Override
-    public int calPoints(){
-        if(isAnswerSelected){
-            //return new ArrayList<String>(correctAnswers).contains(cleanString(enteredAnswer)) ? 1 : 0;
-
-        }
-
-        return 0;
+    public boolean isAnswerCorrect(){
+        return false;
     }
 
     @Override
@@ -72,15 +64,6 @@ public class TextQuestion extends Question {
         }
 
         this.correctAnswers = correctAnswers;
-    }
-
-    @Override
-    public int getPoints() {
-        return 1;
-    }
-
-    public void setPoints(int points) {
-        //this.points = points;
     }
 
     @Override

@@ -1,17 +1,22 @@
-package org.quiz.quizproject;
+package org.quiz.quizproject.controller;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import org.quiz.quizproject.QuizApplication;
+import org.quiz.quizproject.models.MultipleChoiceQuestion;
+import org.quiz.quizproject.models.QuestionWrapper;
 
-public class QuizTextController implements QuizController {
+public class QuizMultipleChoiceController implements QuizController {
     private int numberOfQuestions;
     private int questionNumber;
 
-    private TextQuestion question;
+    private MultipleChoiceQuestion question;
 
     private int timeLimit;
 
@@ -25,7 +30,9 @@ public class QuizTextController implements QuizController {
     private HBox buttonsContainer;
 
     @FXML
-    private TextField textField;
+    private VBox vbox;
+
+    private RadioButton[] radioButtons;
 
     public void onPreviousButtonClick(){
         saveAnswer(true);
@@ -46,7 +53,20 @@ public class QuizTextController implements QuizController {
     }
 
     private boolean saveAnswer(boolean noMessage){
-        if(textField.getText().trim().length() <= 1 && question.isRequired() && !noMessage){
+        boolean atLeastOneSelected = false;
+
+        question.getSelectedAnswers().clear();
+
+        for (int i = 0; i < radioButtons.length; i++){
+            if(radioButtons[i].isSelected()){
+                atLeastOneSelected = true;
+                question.getSelectedAnswers().add(radioButtons[i].getText());
+            }
+        }
+
+        question.setIsAnswerSelected(atLeastOneSelected);
+
+        if(!atLeastOneSelected && question.isRequired() && !noMessage){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("An answer must be selected!");
 
@@ -54,9 +74,6 @@ public class QuizTextController implements QuizController {
 
             return false;
         }
-
-        question.setIsAnswerSelected(true);
-        question.setEnteredAnswer(textField.getText());
 
         return true;
     }
@@ -66,9 +83,21 @@ public class QuizTextController implements QuizController {
         initButtons();
 
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
-        questionTextLabel.setText(question.getTitle());
+        questionTextLabel.setText(question.getTitle() + " (Multiple answers may be chosen)");
 
-        if(question.getIsAnswerSelected()) textField.setText(question.getEnteredAnswer());
+        radioButtons = new RadioButton[question.getChoices().length];
+
+        for(int i = 0; i < radioButtons.length; i++){
+            radioButtons[i] = new RadioButton();
+            radioButtons[i].setText(question.getChoices()[i]);
+
+            if(question.getIsAnswerSelected() && question.getSelectedAnswers().contains(radioButtons[i].getText())) radioButtons[i].setSelected(true);
+
+            if(i == 0) VBox.setMargin(radioButtons[i], new Insets(4, 0, 0, 0));
+            else VBox.setMargin(radioButtons[i], new Insets(2, 0, 0, 0));
+
+            vbox.getChildren().add(radioButtons[i]);
+        }
     }
 
     private void initButtons(){
@@ -106,13 +135,13 @@ public class QuizTextController implements QuizController {
         this.questionNumber = questionNumber;
     }
 
-    public TextQuestion getQuestion() {
+    public MultipleChoiceQuestion getQuestion() {
         return question;
     }
 
     @Override
     public void setQuestion(QuestionWrapper q) {
-        this.question = (TextQuestion) q.getQuestion();
+        this.question = (MultipleChoiceQuestion) q.getQuestion();
         this.timeLimit = q.GetTimeLimit();
     }
 }

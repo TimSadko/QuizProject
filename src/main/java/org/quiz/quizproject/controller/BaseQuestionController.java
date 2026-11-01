@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.util.Duration;
 import org.quiz.quizproject.QuizApplication;
 import org.quiz.quizproject.models.Question;
@@ -32,6 +33,9 @@ public class BaseQuestionController {
 
     @FXML
     protected Button actionButton;
+
+    @FXML
+    protected ProgressBar timeProgressBar;
 
     protected void showNotAnsweredAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -90,7 +94,9 @@ public class BaseQuestionController {
         timer = new Timeline(
                 new KeyFrame(Duration.seconds(1), e -> {
                     timeLeft--;
+
                     timeLeftLabel.setText(timeLeft + " s");
+                    timeProgressBar.setProgress((double) timeLeft / timeLimit);
 
                     if (timeLeft == 0)
                     {
@@ -118,6 +124,8 @@ public class BaseQuestionController {
         questionTextLabel.setText(question.getTitle());
 
         // Start timer, if needed
+        timeProgressBar.setProgress(1);
+
         if(timeLimit <= 0) timeLeftLabel.setText("Unlimited");
         else{
             startTimer();

@@ -37,6 +37,12 @@
                 <Font size="13.0" />
             </font>
         </Label>
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+            <HBox.margin>
+                <Insets left="6.0"/>
+            </HBox.margin>
+            <ProgressBar fx:id="timeProgressBar" minWidth="20" prefHeight="18.0" prefWidth="20000.0"/>
+        </HBox>
 
         <TextField fx:id="textField">
          <VBox.margin>

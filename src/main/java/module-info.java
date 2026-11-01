@@ -6,7 +6,6 @@ module org.quiz.quizproject {
     requires javafx.graphics;
     requires javafx.base;
 
-
     opens org.quiz.quizproject to javafx.fxml;
     exports org.quiz.quizproject;
     opens org.quiz.quizproject.models to javafx.fxml;

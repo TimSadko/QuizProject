@@ -2,6 +2,9 @@ package org.quiz.quizproject.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -46,6 +49,9 @@ public class BaseQuestionController {
 
     @FXML
     protected ProgressBar timeProgressBar;
+
+    private SimpleStringProperty propertyTimeLeft = new SimpleStringProperty();
+    private DoubleProperty propertyTimeLeftPercent = new SimpleDoubleProperty();
 
     protected void showNotAnsweredAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -103,10 +109,7 @@ public class BaseQuestionController {
 
         timer = new Timeline(
                 new KeyFrame(Duration.seconds(1), e -> {
-                    timeLeft--;
-
-                    timeLeftLabel.setText(timeLeft + " s");
-                    timeProgressBar.setProgress((double) timeLeft / timeLimit);
+                    setTimeLeft(timeLeft - 1);
 
                     if (timeLeft == 0)
                     {
@@ -133,10 +136,14 @@ public class BaseQuestionController {
         questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
         questionTextLabel.setText(question.getTitle());
 
+        // Init timer label and progress bar
+        timeLeftLabel.textProperty().bindBidirectional(propertyTimeLeft);
+        timeProgressBar.progressProperty().bindBidirectional(propertyTimeLeftPercent);
+
         // Start timer, if needed
         timeProgressBar.setProgress(1);
 
-        if(timeLimit <= 0) timeLeftLabel.setText("Unlimited");
+        if(timeLimit <= 0) setTimeLeft(0);
         else{
             startTimer();
         }
@@ -161,5 +168,18 @@ public class BaseQuestionController {
     public void setQuestion(QuestionWrapper q) {
         this.question = q.getQuestion();
         this.timeLimit = q.GetTimeLimit();
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+
+        if(timeLeft < 0){
+            propertyTimeLeft.set("Unlimited");
+            propertyTimeLeftPercent.set(1);
+        }
+        else{
+            propertyTimeLeft.set(timeLeft + "s");
+            propertyTimeLeftPercent.set((double) timeLeft / timeLimit);
+        }
     }
 }

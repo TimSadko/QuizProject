@@ -7,10 +7,20 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import org.quiz.quizproject.GameManager;
 import org.quiz.quizproject.QuizApplication;
+import org.quiz.quizproject.models.AttemptResult;
 import org.quiz.quizproject.models.Question;
 import org.quiz.quizproject.models.QuestionWrapper;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class BaseQuestionController {
     protected int numberOfQuestions;
@@ -72,12 +82,12 @@ public class BaseQuestionController {
 
     protected void moveToNextQuestion(){
         saveAnswer();
-        QuizApplication.getInstance().moveToQuestion(questionNumber + 1);
+        GameManager.getInstance().moveToQuestion(questionNumber + 1);
     }
 
     protected void finishQuiz(){
         saveAnswer();
-        QuizApplication.getInstance().finishQuiz();
+        GameManager.getInstance().finishQuiz();
     }
 
     protected void timerRunOutTime(){

@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
+import org.quiz.quizproject.GameManager;
 import org.quiz.quizproject.QuizApplication;
 import org.quiz.quizproject.models.Quiz;
 
@@ -46,11 +47,11 @@ public class MainMenuController {
 
             if(quiz.getPages() == null || quiz.getPages().isEmpty()) throw new ClassCastException();
 
-            var app = QuizApplication.getInstance();
+            var manager = GameManager.getInstance();
 
-            app.setOutputPath(f.getParent());
-            app.setCurrentQuiz(quiz);
-            app.replaceSceneContent("start-up.fxml");
+            manager.setOutputPath(f.getParent());
+            manager.setCurrentQuiz(quiz);
+            manager.startQuiz();
         }
         catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);

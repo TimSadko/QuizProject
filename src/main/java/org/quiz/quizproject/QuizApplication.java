@@ -32,72 +32,7 @@ import java.util.Optional;
 
 public class QuizApplication extends Application {
     private Stage mainStage;
-    private Quiz currentQuiz;
-    private String participantName;
-
-    private String outputPath;
-
-    private boolean hasQuizStarted = false;
-
-//    private Timer timer;
-//    private long timerStart;
-//    private long timerStop;
-
-    private ArrayList<AttemptResult> attempts;
-
-    private static QuizApplication instance;
-
-    public static QuizApplication getInstance() {
-        return instance;
-    }
-
-//    public long getTimerStart() {
-//        return timerStart;
-//    }
-//
-//    public void setTimerStart(long timerStart) {
-//        this.timerStart = timerStart;
-//    }
-//
-//    public long getTimerStop() {
-//        return timerStop;
-//    }
-//
-//    public void setTimerStop(long timerStop) {
-//        this.timerStop = timerStop;
-//    }
-
-    public String getOutputPath() {
-        return outputPath;
-    }
-
-    public void setOutputPath(String outputPath) {
-        this.outputPath = outputPath;
-    }
-
-    public String getParticipantName() {
-        return participantName;
-    }
-
-    public void setParticipantName(String participantName) {
-        this.participantName = participantName;
-    }
-
-    public Quiz getCurrentQuiz() {
-        return currentQuiz;
-    }
-
-    public void setCurrentQuiz(Quiz currentQuiz) {
-        this.currentQuiz = currentQuiz;
-    }
-
-    public ArrayList<AttemptResult> getAttempts() {
-        return attempts;
-    }
-
-    public void setAttempts(ArrayList<AttemptResult> attempts) {
-        this.attempts = attempts;
-    }
+    private GameManager manager;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -107,7 +42,8 @@ public class QuizApplication extends Application {
 
         stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/icon.png"))));
 
-        instance = this;
+        manager = GameManager.getInstance();
+        manager.setApp(this);
 
         Platform.setImplicitExit(false);
 
@@ -122,7 +58,7 @@ public class QuizApplication extends Application {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                if(hasQuizStarted){
+                if(manager.isHasQuizStarted()){
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Warning");
                     alert.setHeaderText("Are you sure you want to exit? All of your progress will be lost.");
@@ -146,81 +82,18 @@ public class QuizApplication extends Application {
         stage.show();
     }
 
-    public void finishQuiz(){
+    public void beginQuiz(){
         try {
-            saveQuizAttempt();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("results-page.fxml"));
-            Parent page = (Parent)loader.load();
-
-            ResultsPageController controller = loader.getController();
-
-            controller.init();
-
-            hasQuizStarted = false;
-
-            Scene scene = mainStage.getScene();
-            mainStage.getScene().setRoot(page);
-            mainStage.sizeToScene();
+            replaceSceneContent("start-up.fxml");
         }
         catch (Exception ex){
-            Alert err = new Alert(Alert.AlertType.ERROR);
-            err.setTitle("An error has occurred:");
-            err.setHeaderText(ex.getMessage());
-            err.setContentText("Failed to save quiz.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("An error has occurred:");
+            alert.setContentText("Failed to start quiz.");
+            //alert.setContentText(ex.getMessage());
 
-            err.showAndWait();
+            alert.showAndWait();
         }
-    }
-
-    private void saveQuizAttempt() throws IOException {
-        File f = new File(outputPath, currentQuiz.getQuizId() + "-results.json");
-
-        AttemptResult newAttempt = new AttemptResult();
-
-        newAttempt.setPlayerName(participantName);
-        newAttempt.setDate(new Date());
-        newAttempt.setTotalQuestions(currentQuiz.getPages().size());
-        newAttempt.setCorrectQuestions(currentQuiz.countCorrectQuestions());
-
-        if(f.exists() && !f.isDirectory()) { // if file already exists, then read and deserialize it, and add new attempt and save all to file.
-            String oldJson = Files.readString(f.toPath());
-
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            QuizResult oldQuizResults = objectMapper.readValue(oldJson, QuizResult.class);
-
-            oldQuizResults.getResults().add(newAttempt);
-
-            attempts = oldQuizResults.getResults();
-
-            printToFile(f, objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(oldQuizResults));
-        }
-        else { // if there is no file, then create new QuizResult, and fill it in, and save it.
-            QuizResult quizResult = new QuizResult();
-
-            quizResult.setQuizId(currentQuiz.getQuizId());
-            quizResult.setName(currentQuiz.getTitle());
-            quizResult.setResults(new ArrayList<AttemptResult>());
-
-            quizResult.getResults().add(newAttempt);
-
-            attempts = quizResult.getResults();
-
-            printToFile(f, new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(quizResult));
-        }
-    }
-
-    private void printToFile(File f, String data) throws IOException {
-        PrintWriter writer = new PrintWriter(f, StandardCharsets.UTF_8);
-        writer.print(data);
-        writer.close();
-    }
-
-    public void startQuiz(){
-        hasQuizStarted = true;
-
-        moveToQuestion(1);
     }
 
     public void replaceSceneContent(String fxml) throws Exception {
@@ -239,9 +112,7 @@ public class QuizApplication extends Application {
         mainStage.sizeToScene();
     }
 
-    public void moveToQuestion(int questionNumber){
-        QuestionWrapper cur = currentQuiz.getPages().get(questionNumber - 1);
-
+    public void moveToQuestion(QuestionWrapper cur, int questionNumber) {
         try{
             switch (cur.getQuestion().getType()){
                 case TrueFalse:
@@ -277,7 +148,7 @@ public class QuizApplication extends Application {
         QuizController controller = loader.getController();
 
         controller.setQuestion(q);
-        controller.setNumberOfQuestions(currentQuiz.getPages().size());
+        controller.setNumberOfQuestions(manager.getCurrentQuiz().getPages().size());
         controller.setQuestionNumber(questionNumber);
 
         controller.init();
@@ -292,7 +163,39 @@ public class QuizApplication extends Application {
             replaceSceneContent("main-menu.fxml");
         }
         catch (Exception ignored){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("An error has occurred:");
+            alert.setContentText("Failed to start quiz.");
+            //alert.setContentText(ex.getMessage());
 
+            alert.showAndWait();
         }
+    }
+
+    public void finishQuiz() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("results-page.fxml"));
+            Parent page = (Parent) loader.load();
+
+            ResultsPageController controller = loader.getController();
+
+            controller.init();
+
+            Scene scene = mainStage.getScene();
+            mainStage.getScene().setRoot(page);
+            mainStage.sizeToScene();
+        }
+        catch (Exception ex){
+            Alert err = new Alert(Alert.AlertType.ERROR);
+            err.setTitle("An error has occurred:");
+            err.setHeaderText(ex.getMessage());
+            err.setContentText("Failed to finish quiz.");
+
+            err.showAndWait();
+        }
+    }
+
+    public Stage getMainStage() {
+        return mainStage;
     }
 }

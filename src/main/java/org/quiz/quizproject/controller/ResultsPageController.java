@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import org.quiz.quizproject.GameManager;
 import org.quiz.quizproject.QuizApplication;
 import org.quiz.quizproject.models.AttemptResult;
 
@@ -51,8 +52,8 @@ public class ResultsPageController {
     }
 
     public void init(){
-        var app = QuizApplication.getInstance();
-        var quiz = app.getCurrentQuiz();
+        var manager = GameManager.getInstance();
+        var quiz = manager.getCurrentQuiz();
 
         quizNameLabel.setText("Quiz name: " + quiz.getTitle());
 
@@ -64,7 +65,7 @@ public class ResultsPageController {
         quizScoreLabel.setText("Your score is " + correctQuestions + "/" + TotalQuestion + ", = ~" + percentScore + "%");
 
         // Sort and set attempts for score table.
-        var attempts = app.getAttempts();
+        var attempts = manager.getAttempts();
         attempts.sort(new Comparator<AttemptResult>() {
             @Override
             public int compare(AttemptResult o1, AttemptResult o2) {
@@ -91,49 +92,7 @@ public class ResultsPageController {
 
     private void saveSCV()
     {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("Select where to save the file");
-
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-        chooser.getExtensionFilters().add(extFilter);
-
-        File f = chooser.showSaveDialog(infoBox.getScene().getWindow());
-
-        var app = QuizApplication.getInstance();
-        var quiz = app.getCurrentQuiz();
-
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        try
-        {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f.getPath()), "UTF-8"));
-            for (AttemptResult attempt : app.getAttempts())
-            {
-                StringBuffer oneLine = new StringBuffer();
-                oneLine.append(quiz.getQuizId());
-                oneLine.append(";");
-                oneLine.append(quiz.getTitle());
-                oneLine.append(";");
-                oneLine.append(attempt.getPlayerName());
-                oneLine.append(";");
-                oneLine.append(attempt.getCorrectQuestions());
-                oneLine.append(";");
-                oneLine.append(attempt.getTotalQuestions());
-                oneLine.append(";");
-                oneLine.append(formatter.format(attempt.getDate()));
-                bw.write(oneLine.toString());
-                bw.newLine();
-            }
-            bw.flush();
-            bw.close();
-        }
-        catch (Exception ex){
-            Alert err = new Alert(Alert.AlertType.ERROR);
-            err.setTitle("An error has occurred:");
-            err.setContentText("Failed to export scoreboard!");
-
-            err.showAndWait();
-        }
+        GameManager.getInstance().saveResultsSCV();
     }
 
     private void quit(){
@@ -141,16 +100,6 @@ public class ResultsPageController {
     }
 
     private void quizAgain(){
-        var app = QuizApplication.getInstance();
-
-        try {
-            app.moveToMainMenu();
-        } catch (Exception e) {
-            Alert err = new Alert(Alert.AlertType.ERROR);
-            err.setTitle("An error has occurred:");
-            err.setContentText("Failed to quiz again!");
-
-            err.showAndWait();
-        }
+        GameManager.getInstance().moveToMainMenu();
     }
 }

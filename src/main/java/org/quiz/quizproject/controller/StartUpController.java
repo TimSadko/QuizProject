@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.quiz.quizproject.GameManager;
 import org.quiz.quizproject.QuizApplication;
 
 public class StartUpController {
@@ -25,11 +26,11 @@ public class StartUpController {
 
         try{
             if(name.length() > 1){
-                var app = QuizApplication.getInstance();
+                var manager = GameManager.getInstance();
 
-                app.setParticipantName(name);
+                manager.setParticipantName(name);
 
-                app.startQuiz();
+                manager.moveToFirstQuestion();
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -46,13 +47,13 @@ public class StartUpController {
 
             alert.showAndWait();
 
-            QuizApplication.getInstance().moveToMainMenu();
+            GameManager.getInstance().moveToMainMenu();
         }
     }
 
     @FXML
     public void initialize() {
-        var quiz = QuizApplication.getInstance().getCurrentQuiz();
+        var quiz = GameManager.getInstance().getCurrentQuiz();
 
         quizNameLabel.setText(quiz.getTitle());
 

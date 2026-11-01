@@ -41,10 +41,12 @@ public class StartUpController {
         }
         catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("An error has occurred:");
-            alert.setHeaderText(ex.getMessage());
+            alert.setTitle("An unknown error has occurred:");
+            //alert.setHeaderText(ex.getMessage());
 
             alert.showAndWait();
+
+            QuizApplication.getInstance().moveToMainMenu();
         }
     }
 
@@ -63,6 +65,7 @@ public class StartUpController {
         Button startQuizButton = new Button();
         startQuizButton.setText("start quiz");
         startQuizButton.setOnAction(e -> onStartButtonClick());
+
         vbox.getChildren().add(startQuizButton);
     }
 }

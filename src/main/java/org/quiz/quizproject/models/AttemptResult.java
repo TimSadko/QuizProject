@@ -2,8 +2,6 @@ package org.quiz.quizproject.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.input.DataFormat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

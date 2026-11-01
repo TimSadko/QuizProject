@@ -25,7 +25,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
 
 public class QuizApplication extends Application {
     private Stage mainStage;
@@ -261,6 +264,7 @@ public class QuizApplication extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("An error has occurred:");
             alert.setContentText("Unknown question type, possibly faulty quiz file.");
+            //alert.setContentText(ex.getMessage());
 
             alert.showAndWait();
         }
@@ -283,7 +287,12 @@ public class QuizApplication extends Application {
         mainStage.sizeToScene();
     }
 
-    public void moveToMainMenu() throws Exception {
-        replaceSceneContent("main-menu.fxml");
+    public void moveToMainMenu() {
+        try{
+            replaceSceneContent("main-menu.fxml");
+        }
+        catch (Exception ignored){
+
+        }
     }
 }

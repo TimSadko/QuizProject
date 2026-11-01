@@ -1,140 +1,60 @@
 package org.quiz.quizproject.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import org.quiz.quizproject.QuizApplication;
-import org.quiz.quizproject.models.QuestionWrapper;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import org.quiz.quizproject.models.TrueFalseQuestion;
 
-public class QuizTrueFalseController implements QuizController {
-    private int numberOfQuestions;
-    private int questionNumber;
-
-    private TrueFalseQuestion question;
-    private int timeLimit;
-
-    @FXML
-    private Label questionNumberLabel;
-
-    @FXML
-    private Label questionTextLabel;
-
-    @FXML
-    private HBox buttonsContainer;
-
+public class QuizTrueFalseController extends BaseQuestionController implements QuizController {
     @FXML
     private RadioButton radioTrue;
 
     @FXML
     private RadioButton radioFalse;
 
+    @FXML
     private ToggleGroup tfGroup;
 
-    public void onPreviousButtonClick(){
-        saveAnswer(true);
-
-        QuizApplication.getInstance().moveToQuestion(questionNumber - 1);
-    }
-
-    public void onNextButtonClick(){
-        if(!saveAnswer(false)) return;
-
-        QuizApplication.getInstance().moveToQuestion(questionNumber + 1);
-    }
-
-    public void onFinishButtonClick(){
-        if(!saveAnswer(false)) return;
-
-        QuizApplication.getInstance().finishQuiz();
-    }
-
-    private boolean saveAnswer(boolean noMessage){
+    @Override
+    protected void saveAnswer(){
         var rb = (RadioButton)tfGroup.getSelectedToggle();
 
         if(rb == null){
-            if(question.isRequired() && !noMessage){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("An answer must be selected!");
-
-                alert.show();
-
-                return false;
-            }
-
-            return true;
+            getQuestion().setIsAnswerSelected(false);
         }
+        else{
+            getQuestion().setIsAnswerSelected(true);
 
-        question.setIsAnswerSelected(true);
+            getQuestion().setSelectedAnswer(rb == radioTrue);
+        }
+    }
 
-        question.setSelectedAnswer(rb == radioTrue);
+    @Override
+    protected boolean isAnswerSelected() {
+        var rb = (RadioButton)tfGroup.getSelectedToggle();
 
-        return true;
+        return rb != null;
     }
 
     @Override
     public void init(){
-        initButtons();
-
-        questionNumberLabel.setText(questionNumber + "/" + numberOfQuestions);
-        questionTextLabel.setText(question.getTitle());
-
-        radioTrue.setText(question.getLabelTrue());
-        radioFalse.setText(question.getLabelFalse());
-
-        tfGroup = new ToggleGroup();
+        // Add radio group
+        radioTrue.setText(getQuestion().getLabelTrue());
+        radioFalse.setText(getQuestion().getLabelFalse());
 
         radioFalse.setToggleGroup(tfGroup);
         radioTrue.setToggleGroup(tfGroup);
 
+        // Set selection
         if(question.getIsAnswerSelected()){
-            if(question.getSelectedAnswer()) radioTrue.setSelected(true);
+            if(getQuestion().getSelectedAnswer()) radioTrue.setSelected(true);
             else radioFalse.setSelected(true);
         }
-    }
 
-    private void initButtons(){
-        if(questionNumber == numberOfQuestions){
-            var btnFinish = new Button();
-            btnFinish.setText("finish");
-            btnFinish.setOnAction(e -> onFinishButtonClick());
-
-            buttonsContainer.getChildren().add(btnFinish);
-        }
-        else{
-            var btnNext = new Button();
-            btnNext.setText("next");
-            btnNext.setOnAction(e -> onNextButtonClick());
-
-            buttonsContainer.getChildren().add(btnNext);
-        }
-    }
-
-    public int getNumberOfQuestions() {
-        return numberOfQuestions;
-    }
-
-    @Override
-    public void setNumberOfQuestions(int numberOfQuestions) {
-        this.numberOfQuestions = numberOfQuestions;
-    }
-
-    public int getQuestionNumber() {
-        return questionNumber;
-    }
-
-    @Override
-    public void setQuestionNumber(int questionNumber) {
-        this.questionNumber = questionNumber;
+        BaseInit();
     }
 
     public TrueFalseQuestion getQuestion() {
-        return question;
-    }
-
-    @Override
-    public void setQuestion(QuestionWrapper q) {
-        this.question = (TrueFalseQuestion) q.getQuestion();
-        this.timeLimit = q.GetTimeLimit();
+        return (TrueFalseQuestion) question;
     }
 }

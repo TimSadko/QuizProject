@@ -43,9 +43,10 @@
             <Insets top="4.0" />
          </VBox.margin></TextField>
     </VBox>
-    <HBox fx:id="buttonsContainer" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+    <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <padding>
             <Insets top="5.0" />
         </padding>
+        <Button fx:id="actionButton"/>
     </HBox>
 </GridPane>

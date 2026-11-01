@@ -1,7 +1,5 @@
 package org.quiz.quizproject.models;
 
-import org.quiz.quizproject.models.QuestionWrapper;
-
 import java.util.ArrayList;
 
 public class Quiz {

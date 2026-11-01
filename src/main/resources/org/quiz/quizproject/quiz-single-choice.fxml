@@ -26,6 +26,19 @@
         <ToggleGroup fx:id="scGroup" />
     </fx:define>
 
+    <HBox alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Label text="Time left: " textFill="#595959">
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+        <Label fx:id="timeLeftLabel" text="0" textFill="#595959">
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+    </HBox>
+
     <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <padding>
             <Insets top="5.0"/>
@@ -42,9 +55,10 @@
             </font>
         </Label>
     </VBox>
-    <HBox fx:id="buttonsContainer" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+    <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <padding>
             <Insets top="5.0"/>
         </padding>
+        <Button fx:id="actionButton"/>
     </HBox>
 </GridPane>
